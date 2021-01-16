@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+        <h1>{{msg}} {{gettime1()}}</h1>
+        <h2>{{msg}} {{gettime2}}</h2>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        /* 
+            data应该是一个函数，它返回一个对象，
+            然后 Vue 会通过响应性系统将其包裹起来，
+            并以 $data 的形式存储在组件实例中
+            在$data中的数据会被包裹进响应式系统,
+            并且在实例中暴露出来,如vm.msg === vm$data.msg 
+            如果直接在vm添加属性,无法被包裹进vue的响应式系统,
+            只有在vm.$data添加的属性才会被包裹进行vue响应式系统,
+        */
+        data() {
+            return {
+                msg: 'hello'
+            }
+        },
+        methods: {
+            gettime1() {
+                // 只要model层更新，就会触发执行
+                return Date.now()
+            }
+        },
+        computed: {
+            gettime2() {
+                // 只用所依赖的项，更新的时候才会重新计算
+                return Date.now()
+            }
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

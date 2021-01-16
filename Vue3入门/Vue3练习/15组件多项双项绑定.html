@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15组件多项双项绑定</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script>
+    const app = Vue.createApp({
+        setup(props) {
+            const { reactive } = Vue
+            const user = reactive({
+                username: '',
+                password: ''
+            })
+            return {
+                user
+            }
+        },
+        template: `
+        <div>
+            <double-input v-model:username="user.username" v-model:password="user.password" />
+            <div>
+                {{user.username}} --- {{user.password}}
+            </div>
+        </div>
+        `
+    })
+    app.component('doubleInput', {
+        props: ['username', 'password'],
+        template: `
+            <div>
+                username: <input type="text" :value="username" @input="handlerInput($event,'username')" >
+                password: <input type="password" :value="password" @input="handlerInput($event,'password')">
+            </div>
+        `,
+        methods: {
+            handlerInput(event, prop) {
+                console.log(prop, event.target.value)
+                this.$emit(`update:${prop}`, event.target.value)
+            }
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04命名视图</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    body {
+      height: 100vh;
+      margin: 0;
+      display: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <router-link to="/">HOME</router-link>
+    <router-view></router-view>
+    <router-view name="b"></router-view>
+    <router-view name="c"></router-view>
+  </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+  const componentDefault = {
+    render(h) {
+      return h('div', [h('h1', 'componentDefault')])
+    },
+  }
+  const componentB = {
+    render(h) {
+      return h('div', [h('h1', 'componentB')])
+    },
+  }
+  const componentC = {
+    render(h) {
+      return h('div', [h('h1', 'componentC')])
+    },
+  }
+
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+      }
+    },
+    router: new VueRouter({
+      routes: [
+        {
+          //注意这里不是component， 而是components
+          /* 
+            如果当前路由只是路由到单个组件，那么就是component
+            如果路由是路由到多个组件，那么是components
+          */
+          path: '/', name: 'home', components: {
+            default: componentDefault,
+            b: componentB,
+            c: componentC
+          }
+        }
+      ]
+    })
+  })
+</script>
+
+</html>

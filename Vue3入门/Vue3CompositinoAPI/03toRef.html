@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03toRef</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        setup(props) {
+            const { reactive, toRef } = Vue
+            const data = reactive({
+                name: 'xiaoming'
+            })
+            // toRef 取出响应式对象指定的响应式属性值，
+            // toRef从 data里面去拿age这个响应式数据
+            // 如果存在就直接取，如果不存在会取出一个空的响应式数据，空的ref
+            const age = toRef(data, 'age')
+            // age.value是undefined
+            console.log(age)
+            return {
+                age
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

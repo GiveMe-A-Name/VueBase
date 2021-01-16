@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>02嵌套路由</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    body {
+      height: 100vh;
+      margin: 0;
+      display: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <router-link to="/login">login</router-link>
+    <router-link to="/register">register</router-link>
+    <router-view></router-view>
+  </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+  const login = {
+    render(h) {
+      return h("div", [
+        h("h1", "login"),
+        h("router-view"),
+        h(
+          "router-link",
+          {
+            attrs: {
+              to: {
+                name: 'child1',
+                query: {
+                  name: 'xiaoming',
+                  age: 14
+                },
+              },
+            },
+          },
+          "child1"
+        ),
+        h(
+          "router-link",
+          {
+            attrs: {
+              to: "/login/child2",
+            },
+          },
+          "child2"
+        ),
+      ]);
+    },
+  };
+  const register = {
+    render(h) {
+      return h("div", [h("h1", "register")]);
+    },
+  };
+  const child1 = {
+    render(h) {
+      return h("div", "child1");
+    },
+    created() {
+      console.log(this.$route)
+    }
+  };
+  const child2 = {
+    render(h) {
+      return h("div", "child2");
+    },
+  };
+  let vm = new Vue({
+    el: "#app",
+    data() {
+      return {};
+    },
+    router: new VueRouter({
+      routes: [
+        {
+          path: "/login",
+          name: "login",
+          component: login,
+          children: [
+            {
+              path: "child1",
+              name: 'child1',
+              component: child1,
+            },
+            {
+              path: "child2",
+              name: 'child2',
+              component: child2,
+            },
+          ],
+        },
+        {
+          path: "/register",
+          name: "register",
+          component: register,
+        },
+      ],
+    }),
+  });
+</script>
+
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05路由导航全过程</title>
+    <script src="../../lib/vue.js"></script>
+    <script src="../../lib/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/login">login</router-link>
+        <router-link to="/home">home</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+<script>
+    const login = {
+        template: '<h1>login</h1>',
+        beforeRouteEnter(to, from, next) {
+            console.log(`login beforeRouteEnter`)
+            next()
+        },
+        beforeRouteUpdate(to, from, next) {
+            console.log(`login beforeRouteUpdate`)
+            next()
+        },
+        beforeRouteLeave(to, from, next) {
+            console.log(`login beforeRouteLeave`)
+            next()
+        }
+    }
+    const home = {
+        template: `<h1>home</h1>`,
+        beforeRouteEnter(to, from, next) {
+            console.log(`home beforeRouteEnter`)
+            next()
+        },
+        beforeRouteUpdate(to, from, next) {
+            console.log(`home beforeRouteUpdate`)
+            next()
+        },
+        beforeRouteLeave(to, from, next) {
+            console.log(`home beforeRouteLeave`)
+            next()
+        }
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/login',
+                component: login,
+                beforeEnter: function (to, from, next) {
+                    console.log(`login beforeEnter`)
+                    next()
+                }
+            },
+            {
+                path: '/home',
+                component: home,
+                beforeEnter: (to, from, next) => {
+                    // ...
+                    console.log(`home beforeEneter`)
+                    next()
+                }
+            }
+        ],
+    })
+    router.beforeEach((to, from, next) => {
+        console.log(`Global beforeEach`)
+        next()
+    })
+    router.afterEach((to, from) => {
+        console.log(`Global afterEach`)
+    })
+    const vm = new Vue({
+        el: '#app',
+        router
+    })
+
+</script>
+
+</html>

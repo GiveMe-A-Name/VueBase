@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01入门</title>
+    <style>
+        @keyframes leftToRight {
+            0% {
+                transform: translateX(-100px);
+            }
+
+            50% {
+                transform: translateX(-50px);
+            }
+
+            100% {
+                transform: translateX(0px);
+            }
+        }
+
+        .animation {
+            animation: leftToRight 3s;
+        }
+
+        .transition {
+            transition: background-color 1s ease;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .green {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div :class="animate" class="transition" @click="handleClick">hello world</div>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 定义一个Hash对象，
+                // 把css样式和boolean进行对应，表示绑定对象是否拥有指定的css样式
+                animate: {
+                    animation: false,
+                    blue: true,
+                    green: false
+                }
+            }
+        },
+        methods: {
+            handleClick() {
+                this.animate.blue = !this.animate.blue
+                this.animate.green = !this.animate.green
+                this.animate.animation = !this.animate.animation
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

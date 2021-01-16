@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12setup组件传参</title>
+    <style>
+        .test {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <input type="text" v-model="title">
+        <my-book :title="title" class="test" id="book" />
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        setup(props) {
+            const { ref } = Vue
+            const title = ref('asd')
+            return {
+                title
+            }
+        },
+    })
+    app.component('MyBook', {
+        props: ['title'],
+        setup(props, context) {
+            const { toRefs, watchEffect } = Vue
+            const { title } = toRefs(props)
+            const { attrs } = context
+            watchEffect(() => {
+                console.log(title.value)
+            })
+            // console.log(title)
+            return {
+
+            }
+        },
+        template: `<h1>{{title}}</h1>`
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10Project&Inject</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <child />
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        setup(props) {
+            const { ref, provide, readonly } = Vue
+            // 定义一个字符串ref
+            const name = ref('hello world')
+            // 定义一个provide key-value,
+            // 把父组件的name提供给后辈组件
+            // 使用readonly对传递的nameRef进行封装, 让子组件没办法去修改
+            provide('name', readonly(name))
+            // 定义一个修改父组件nameRef的的changeName方法
+            // 把修改changeName方法提供给后辈组件
+            provide('changeName', (value) => {
+                name.value = value
+            })
+
+            return {
+
+            }
+        }
+    })
+    app.component('child', {
+        setup(props) {
+            const { inject, emit } = Vue
+            // 通过'name' 注入 nameRef
+            const name = inject('name')
+
+            // 通过'changeName' 注入修改方法
+            const changeName = inject('changeName')
+            const handleClick = function () {
+                // 子组件这里时触发修改方法
+                changeName('helloaslkdjaslkdj')
+            }
+            return {
+                name,
+                handleClick
+            }
+        },
+        template: `
+            <div @click="handleClick">
+                child
+                <h1>{{name}}</h1>
+            </div>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

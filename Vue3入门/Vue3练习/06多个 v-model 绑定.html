@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05父子组件双向绑定</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                firstName: '',
+                lastName: ''
+            }
+        },
+        template: `
+            <div>
+                <user-name v-model:first-name="firstName" v-model:last-name="lastName" />
+                <p>{{firstName}} -- {{lastName}}</p>
+            </div>
+        `
+    })
+    app.component('user-name', {
+        props: {
+            firstName: String,
+            lastName: String,
+        },
+        template: `
+            <input type="text" :value="firstName" @input="$emit('update:firstName',$event.target.value)" />
+            <input type="text" :value="lastName" @input="$emit('update:lastName',$event.target.value)"/>
+        `,
+
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

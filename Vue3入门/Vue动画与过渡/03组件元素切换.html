@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03组件元素切换</title>
+    <script src="../libs/vue.global.js"></script>
+    <style>
+        .v-enter-from,
+        .v-leave-to {
+            opacity: 0;
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: opacity .3s ease-in;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                Dcomponent: 'a'
+            }
+        },
+        template: `
+            <div>   
+                <!-- 
+                    可以通过 appear attribute 设置节点在初始渲染的过渡
+                    在初次渲染的时候也会适用动画，过渡效果
+                 -->
+                <transition mode="out-in"  appear>
+                    <component :is="componentName" />
+                </transition>
+                <button @click="handleChange">Click!</button>
+            </div>
+        `,
+        computed: {
+            componentName() {
+                return 'my-component-' + this.Dcomponent
+            }
+        },
+        methods: {
+            handleChange() {
+                if (this.Dcomponent === 'a') {
+                    this.Dcomponent = 'b'
+                } else {
+                    this.Dcomponent = 'a'
+                }
+            }
+        },
+
+    })
+    app.component(`my-component-a`, {
+        template: `
+            <div>
+                my-component-a
+            </div>
+        `
+    })
+    app.component(`my-component-b`, {
+        template: `
+            <div>
+                my-component-b
+            </div>
+        `
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

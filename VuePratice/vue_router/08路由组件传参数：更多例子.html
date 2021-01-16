@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08路由组件传参数：更多例子</title>
+</head>
+
+<body>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+    let dynamicPropsFn = route => {
+        const now = new Date()
+        return {
+            // 这些数据绑定到组件的props中
+            name: (now.getFullYear() + parseInt(route.params.years)) + '!'
+        }
+    }
+    const hello = {
+        render(h) {
+            return h('div', [h('h2', `Hello ${this.name} ${this.attrs}`)])
+        },
+        props: {
+            name: {
+                type: String,
+                default: 'Vue!'
+            }
+        }
+    }
+    routes = [
+        //请求主页
+        { path: '/', component: hello },
+
+        //动态路由，props为true,也就是说把所有的params和query都传递给props
+        { path: '/hello/:name', component: hello, props: true },
+
+        //给props传递一个对象，使用key-value的形式，给组件props赋值
+        { path: '/static', component: hello, props: { name: "world" } },
+
+        //给props传入一个回调函数，返回一个key-value的对象，给组件props赋值
+        { path: '/dynamic/:years', component: hello, props: dynamicPropsFn },
+
+        { path: '/attrs', component: hello, props: { name: 'attrs' } }
+    ]
+    let vm = new Vue({
+        el: "#app",
+        router: new VueRouter({
+            routes: routes,
+        })
+    })
+
+</script>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06组件插槽1.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    // provide: 祖先组件提供属性
+    // inject： 孙子组件接收provide提供的数据
+    const app = Vue.createApp({
+        // 这里祖先组件提供一个provide对象，把需要穿透的数据都包裹在这个provide对象中去，
+        // 如果要访问祖先组件的property,则这将不起作用：
+        // 要访问祖先组件 property，我们需要将 provide 转换为返回对象的函数
+        data() {
+            return {
+                msg: 'hello msg'
+            }
+        },
+        provide() {
+            return {
+                count: this.msg
+            }
+        },
+        template: `
+            <div>
+                <child />
+            </div>
+        `
+    })
+    app.component('child', {
+        template: `<child-child />`
+    })
+    app.component('child-child', {
+        // inject是一个数组，
+        inject: ['count'],
+        template: `<h1>{{count}}</h1>`
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

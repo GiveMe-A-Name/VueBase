@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+        <div>
+            <label for="">id:</label>
+            <input type="text" v-model.number="id">
+            <label for="">name:</label>
+            <input type="text" v-model="name">
+            <button @click="add">add</button>
+            <label>search:</label>
+            <input type="text" v-model="keywords">
+        </div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>名称</th>
+                    <th>时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in search()">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.ctime}}</td>
+                    <td><button @click="handleDelete(index)">delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                id: '',
+                name: '',
+                keywords: '',
+                lists: [
+                    { id: 1, name: "苹果1", ctime: new Date() },
+                    { id: 2, name: "苹果2", ctime: new Date() },
+                    { id: 3, name: "苹果3", ctime: new Date() },
+                ]
+            }
+        },
+        methods: {
+            add() {
+                this.lists.push({ id: this.id, name: this.name, ctime: new Date() })
+            },
+            handleDelete(index) {
+                this.lists.splice(index, 1)
+            },
+            search() {
+                return this.lists.filter(item => {
+                    return item.name.includes(this.keywords)
+                })
+            }
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

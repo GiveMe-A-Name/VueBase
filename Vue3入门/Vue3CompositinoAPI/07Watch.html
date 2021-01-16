@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07Watch</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <div>
+            <input type="text" v-model="name">
+        </div>
+        <div>
+            name: {{name}}
+        </div>
+        <div>
+            <input type="text" v-model="user.age">
+        </div>
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        setup(props, context) {
+            const { ref, reactive, watch } = Vue
+            const name = ref('hello')
+            const user = reactive({
+                name: "xiaoming",
+                age: 18
+            })
+            // watch传入两个参数，
+            // 第一个参数是要监听的对象，第二个参数是一个回调函数
+            // 回调函数传入 newValue，和oldValue。
+            // 当数据变化的时候，触发回调函数，我们可以根据新旧值做一些操作
+
+
+
+            // 去监听这个RefImpl对象
+            watch(name, (newValue, oldValue) => {
+                // console.log(newValue, oldValue)
+            })
+
+            // 去监听对象的某个属性，由于对象的单个属性并不是响应式数据
+            // 所以需要把他封装成一个函数
+            watch(() => user.age, (newVal, oldVal) => {
+                // console.log(newVal, oldVal)
+            })
+
+            // 监听多个数据的值，把他封装成一个数组
+            watch([name, () => user.age], ([newName, newAge], [oldName, oldAge]) => {
+                console.log(`${newName},${oldName} ----- ${newAge},${oldAge}`)
+            })
+
+            return {
+                name,
+                user
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

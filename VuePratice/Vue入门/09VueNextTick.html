@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>09VueNextTick</title>
+</head>
+
+<body>
+    <div id="app">
+        <ul ref="lists">
+            <li v-for=" (list,index) in lists" :key="index">{{list}}</li>
+        </ul>
+        <button @click=" add">add</button>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+
+    let vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                lists: [1, 2, 3]
+            }
+        },
+        methods: {
+            add() {
+                this.lists.push(Date.now())
+                this.lists.push(Date.now())
+                this.lists.push(Date.now())
+                /* 
+                    由于每次Vue都是异步更新视图，
+                    所以在获得length的时候，视图还没有更新
+                    const listRef = this.$refs.lists
+                    console.log(listRef.length)
+                */
+                //    我们可以使用this.$nextTick传入一个回调函数，将回调延迟到下次 DOM 更新循环之后执行。
+                this.$nextTick(() => {
+                    // 下列代码会延迟到下次DOM更新之后才会再执行。
+                    const listRef = this.$refs.lists
+                    console.log(listRef.childNodes.length)
+                })
+            }
+        },
+    })
+</script>
+
+</html>

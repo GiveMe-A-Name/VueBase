@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02组件传参</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    // 建立一个组件对象
+    const MyComponent = {
+        // 对于子组件来说，从父组件传递过来的props是readOnly,是不能够修改的
+        props: ['a', 'b', 'c', 'd'],
+        template: `<div>{{a}} - {{b}} - {{c}} - {{d}} </div>`
+    }
+    const app = Vue.createApp({
+        data() {
+            return {
+                obj: {
+                    a: 1,
+                    b: 2,
+                    c: 3,
+                    d: 4
+                }
+            }
+        },
+        components: {
+            MyComponent
+        },
+        // v-bind="obj"，这里借用了了ES6对象的模式匹配
+        template: `<my-component v-bind="obj"></my-component>`,
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02ref,reactive响应式引用2.0</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <h2>{{name}}</h2>
+        <h4>{{ age }}</h4>
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        setup(props, context) {
+            const { reactive, readonly, toRefs } = Vue
+            let nameObj = {
+                name: 'hello',
+                age: 18
+            }
+            nameObj = reactive(nameObj)
+            const readonlyObj = readonly(nameObj)
+            setTimeout(() => {
+                nameObj.name = 'hello js'
+                nameObj.age = 190
+
+                readonlyObj.name = 'hellojs'
+                // 可以进行更改，但会进行警告
+                // Set operation on key "name" failed: target is readonly.
+            }, 1000)
+
+            // toRefs 将proxy({name: "hello",age = 18}) ,转化为一个对象，对象结构如下
+            /* 
+                transformObj = 
+                {
+                    name: proxy({ value: "hello"}) 
+                    age: proxy({value: 18}) 
+                }
+            */
+            // 所以再进行解构的时候，实际上是调用  { name, age }  = transformObj
+            const { name, age } = toRefs(nameObj)
+            return toRefs(readonlyObj)
+
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

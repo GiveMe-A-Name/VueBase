@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03动态路由</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <router-link to="/login">login</router-link>
+    <router-link to="/register">register</router-link>
+    <router-link :to="{name: 'login'}" replace>replace</router-link>
+    <router-view></router-view>
+    <button @click="handleRouter">点击按钮</button>
+  </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+  // ? $route 和 $router 的区别
+  // $router是一个代表路由器的全局对象，它有一个历史调用栈，来实现浏览器history功能
+  // 可以不实现历史功能,比如 ： $router.replace。意味着直接替代当前路由,不会产生历史记录
+  // 实现前进和后退 的功能 ， $router.go(1) 前进1 ，$router.go(1) 后退1
+  const login = {
+    render(h) {
+      return h('div', [h('h1', 'login')])
+    },
+  }
+  const register = {
+    render(h) {
+      return h('div', [h('h1', 'register')])
+    },
+
+  }
+
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+      }
+    },
+    methods: {
+      handleRouter() {
+        //路由到 #/login
+        this.$router.push('/login')
+
+        //路由到 名字为'login' 的组件
+        // this.$router.push({'name':'login'})
+
+        //带查询or 参数路由
+        /*
+        this.$router.push(
+          {
+            'name': 'login',
+            query: {
+              name: 'username',
+              age: 24,
+            },
+            params: {
+              hello: 'world',
+              YourName: 'xiaoxi',
+            }
+          }
+        )
+        */
+      }
+    },
+    router: new VueRouter({
+      routes: [
+        {
+          path: '/login',
+          name: 'login',
+          component: login
+        },
+        {
+          path: '/register',
+          name: 'register',
+          component: register
+        }
+      ]
+    })
+  })
+</script>
+
+</html>

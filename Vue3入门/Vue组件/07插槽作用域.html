@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06组件插槽1.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    // 作用域插槽
+    const app = Vue.createApp({
+        data() {
+            return {
+                text: "hello world"
+            }
+        },
+        template: `
+            <div>
+                <test>
+                    <template #default="slotProps">
+                        <li>{{slotProps.items[0]}} -- {{slotProps.items[1]}}</li>
+                    </template>
+                </test>
+            </div>
+        `
+    })
+    app.component('test', {
+        template: `
+        <ul>
+            <h4> 绑定在 "slot" 元素上的 attribute 被称为插槽 prop </h4>
+            <slot v-for="(item,index) in list" :items="[item,index]"> </slot>
+        </ul>
+        `,
+        data() {
+            return {
+                list: ['a', 'b', 'c', 'd']
+            }
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

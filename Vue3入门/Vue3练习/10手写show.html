@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10手写show</title>
+</head>
+
+<body>
+    <div id="root">
+        <div v-myshow="show">hello world</div>
+        <button @click="show = !show">Click</button>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: true
+            }
+        },
+    })
+    // 使用函数简写
+    // 该函数会在指令mounted和updated的时候都会执行；
+    app.directive('myshow', (el, binding) => {
+        const show = binding.value  // 得到binding的值
+        // 如果show等于false的时候就会把el的display置为'none'
+        if (!show) {
+            el.style.display = 'none'
+        } else {
+            el.style.display = null
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

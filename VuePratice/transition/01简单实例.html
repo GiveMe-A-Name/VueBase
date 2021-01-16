@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01简单实例</title>
+    <style>
+        /* 
+            v-enter-active,v-leave-active
+            代表在元素插入和删除的过程中，会被激活
+         */
+        .v-enter-active,
+        .v-leave-active {
+            transition: all .4s ease;
+        }
+
+        /* 
+            .v-enter ----- 代表元素 从插入动作开始时的样式；
+            .v-enter-to ----- 代表元素 插入动作执行完毕最终样式
+
+            .v-leave  ----- 定义元素 离开动作开始时的样式
+            .v-leave-to ---- 定义元素 离开动作执行完毕的样式
+
+         */
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="show = !show">show</button>
+        <!-- 使用过渡标签，封装起来 -->
+        <transition>
+            <p v-if="show">hello vue!</p>
+        </transition>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                show: true
+            }
+        },
+    })
+</script>
+
+</html>

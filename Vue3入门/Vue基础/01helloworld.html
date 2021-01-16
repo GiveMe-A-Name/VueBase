@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01helloworld</title>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                count: 1,
+                item: ['python', 'js', 'Go']
+            }
+        },
+        template: `
+            <div>
+                <ul>
+                    <myComponent v-for="(item,index) in item " :count="count+index" :content="item" />
+                </ul>
+                <button @click="add">click</button>
+            </div>
+        `,
+        methods: {
+            add() {
+                this.count++
+            }
+        }
+    })
+    app.component('myComponent', {
+        props: ["content", "count"],
+        template: `<li>{{content}}--{{count}}</li>`
+    })
+    // mount 不返回应用本身。相反，它返回的是根组件实例。
+    // 这里vm是根组件实例
+    const vm = app.mount('#root')
+</script>
+
+</html>

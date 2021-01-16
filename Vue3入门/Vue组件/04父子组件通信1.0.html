@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04父子组件通信1.0</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const Hello = {
+        // 具有更好的可读性，可以把该组件抛给父组件的通信事件，通过一个emits数组列举出来
+        // 可以很清晰地看到我（子组件）给父组件传递哪些函数，父组件可以监听哪些函数
+        // emits: ['hello '],
+        // 当然emits还是可以是对象
+        emits: {
+            // 函数接收传递给 $emit 调用的参数，并返回一个布尔值以指示事件是否有效。
+            add: (value) => {
+                // 可以给add事件设置一个拦截函数，
+                // add事件传递地参数会经过它地验证。
+                // 如果通过 return true,正常传递
+                // 如果不通过 return false ，只会进行警告，并不会进行拦截
+                // 但只能对传过来的参数进行验证，而也不能验证，组件data
+                if (value <= 1) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            }
+        },
+        props: ['content'],
+        template: `<div @click="handleClick">{{content}}</div>`,
+        methods: {
+            handleClick() {
+                this.$emit('add', 2)
+            }
+        }
+
+    }
+    const app = Vue.createApp({
+        data() {
+            return {
+                count: 1,
+            }
+        },
+        components: {
+            Hello
+
+        },
+        template: `<hello :content="count" @add="hanleAdd" />`,
+        methods: {
+            hanleAdd() {
+                this.count += 1
+            }
+        }
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03组件元素切换</title>
+    <script src="../libs/vue.global.js"></script>
+    <style>
+        .v-enter-from,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateX(10px);
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all .5s ease-in;
+        }
+
+        .v-enter-to,
+        .v-leave-from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .v-move {
+            transition: all .5s ease-in;
+        }
+
+        ul>li {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                lists: [1, 2, 3],
+            }
+        },
+        template: `
+            <div>
+                <ul>
+                <transition-group appear>
+                    <li v-for="item in lists" :key="item" >
+                        {{item}}-
+                    </li>
+                </transition-group>
+                </ul>
+                <button @click="add">add</button>
+                <button @click="sub">sub</button>
+            </div>
+        `,
+        methods: {
+            add() {
+                this.lists.unshift(this.lists.length)
+            },
+            sub() {
+                this.lists.pop()
+            }
+        },
+
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04Teleport传送门功能</title>
+    <script src="../libs/vue.global.js"></script>
+    <style>
+        .box {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            background-color: aqua;
+        }
+
+        .mark {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #000;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div class="box">
+            <button @click="show = !show">Click</button>
+            <teleport to='body'>
+                <div class="mark" v-show="show">
+                    <button @click="show = !show">Click it agagin</button>
+                </div>
+            </teleport>
+        </div>
+    </div>
+</body>
+<script>
+    // teleport 传送门，通过该功能，我们可以把任意部分template传送到我们指定的元素内部
+    // 比如我想把div.mark传送到body元素，让这个蒙层覆盖整个页面
+    // 我们可以使用<teleport to="body"></teleport>标签将整个包裹部分进行传送body元素
+    // 猜测是使用document.body.append(包裹部分) 来进行实现的，放在元素子孩子队尾；
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: false
+            }
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06组件插槽1.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    // 动态组件：根据数据的变化，结合component这个标签，来动态的切换组件的显示， （销毁与重建）
+    /* 
+        由于动态组件涉及到，组件的销毁与重建，所以组件的实时状态没办法保存下来，
+        所以我们要设法把组件状态进行保存；就引入了keep-alive
+        <keep-alive> 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。
+     */
+    const app = Vue.createApp({
+        data() {
+            return {
+                currentItem: "test1"
+            }
+        },
+        template: `
+            <div>
+                <keep-alive>
+                    <component :is='currentItem' />
+                </keep-alive>
+            </div>
+        `
+    })
+    app.component('test1', {
+        template: `<input type="text" placeholder="hello test1"/>`,
+    })
+    app.component('test2', {
+        template: `<h1>hello test2</h1>`,
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

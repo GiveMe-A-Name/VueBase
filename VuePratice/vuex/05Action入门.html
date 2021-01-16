@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05Action入门</title>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{count}}</h1>
+        <button @click="add">add</button>
+        <button @click="addAsync">addAsync</button>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script src="../lib/vuex.js"></script>
+<script>
+    const store = new Vuex.Store({
+        state: {
+            count: 0,
+        },
+        mutations: {
+            increment(state, payload) {
+                state.count++
+            }
+
+        },
+        /* 
+            Action 类似于 mutation，不同在于：
+            1. Action 提交的是 mutation，而不是直接变更状态。
+            2. Action 可以包含任意异步操作。
+         */
+        actions: {
+            //Action 函数接受一个与 store 实例具有相同方法和属性的 context 对象
+            increment(context) {
+                context.commit('increment')
+            },
+            // actions可以执行异步
+            incrementAsync(context, payload) {
+                setTimeout(() => {
+                    context.state.count++
+                }, 1000)
+            }
+        }
+    })
+    let vm = new Vue({
+        el: '#app',
+        store,
+        computed: {
+            count() {
+                return this.$store.state.count
+            }
+        },
+        methods: {
+            //store.dispatch 方法触发来触发action
+            add() {
+                this.$store.dispatch('increment')
+            },
+            addAsync() {
+                this.$store.dispatch('incrementAsync')
+            }
+
+        }
+    })
+</script>
+
+</html>

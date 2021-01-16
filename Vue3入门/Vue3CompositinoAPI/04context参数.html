@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04context参数</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!-- setup中的context包括id:'child'这个属性值 -->
+        <child id="child" @change="handlechange">
+            {{msg}}
+        </child>
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                msg: 'hello'
+            }
+        },
+        methods: {
+            handlechange() {
+                console.log(this.msg)
+            }
+        },
+    })
+    app.component('child', {
+        template: `<div @click="handleClick">child</div>`,
+        setup(props, context) {
+            // context有三个属性 {attrs,slots,emit}
+            // const { h } = Vue
+            const { attrs, slots, emit } = context
+            // context.attrs 父组件传递过来的None-Props属性
+            console.log(attrs)
+
+            // 里面包含一个slots.default()函数，
+            // 调用slots.default() 会返回父组件插入到子组件内容的数组形式
+            console.log(slots.default())
+
+            const handleClick = function () {
+                // emit去触发事件，
+                // 父组件监听事件
+                emit('change')
+            }
+            return {
+                handleClick
+            }
+        },
+
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

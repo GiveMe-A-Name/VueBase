@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01跑马灯效果</title>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+    body{
+      height: 100vh;
+      margin: 0;
+      display: 0;
+      display: flex;
+      justify-content:center;
+      align-items:center;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <button @click="Run">Run</button>
+    <button @click="Stop">Stop</button>
+    <h3>{{msg}}</h3>
+  </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+  new Vue({
+    el:'#app',
+    data() {
+      return {
+        msg:"hello world",
+        intervalid: null,
+      }
+    },
+    methods: {
+      Run(){
+        if(this.intervalid !== null) return 
+        let _this = this
+        this.intervalid = setInterval(()=>{
+          let start = _this.msg.substring(0,1)
+          let end = _this.msg.substring(1)
+          _this.msg = end + start
+        },300)
+      },
+      Stop(){
+        if(!this.intervalid) return 
+        clearInterval(this.intervalid)
+        this.intervalid = null
+      }
+    },
+  })
+</script>
+</html>

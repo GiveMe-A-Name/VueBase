@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>09history模式</title>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/a">a</router-link>
+        <router-link to="/b">b</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+    const componentA = {
+        render(h) {
+            return h('div', [h('h1', 'componentA')])
+        },
+    }
+    const componentB = {
+        render(h) {
+            return h('div', [h('h1', 'componentB')])
+        },
+    }
+    let vm = new Vue({
+        el: '#app',
+        router: new VueRouter({
+            mode: 'history',
+            routes: [
+                {
+                    path: '/a',
+                    component: componentA,
+                },
+                {
+                    path: '/b',
+                    component: componentB,
+                }
+            ]
+        })
+    })
+</script>
+
+</html>

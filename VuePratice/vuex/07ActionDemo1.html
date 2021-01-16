@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07ActionDemo1</title>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script src="../lib/vuex.js"></script>
+<script>
+    const store = new Vuex.Store({
+        state: {
+            count: 0,
+        },
+        mutations: {
+            add(state) {
+                state.count++
+            }
+        },
+        actions: {
+            addAysnc(context) {
+                setTimeout(() => {
+                    context.commit('add')
+                }, 1000);
+            }
+        }
+    })
+    let vm = new Vue({
+        el: '#app',
+        store,
+        mounted() {
+            this.$store.dispatch('addAysnc')
+        }
+    })
+</script>
+
+</html>

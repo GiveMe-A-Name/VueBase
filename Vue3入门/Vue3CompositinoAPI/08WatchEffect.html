@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08WatchEffect</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <div>
+            <input type="text" v-model="name">
+        </div>
+        <div>
+            Name : {{name}}
+        </div>
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        setup(props, context) {
+            const { ref, reactive, watchEffect } = Vue
+            // watchEffect 传递一个回调函数
+            // watchEffect它立即执行传入的一个函数，同时响应式追踪其依赖，并在其依赖变更时重新运行该函数
+            // 这个回调函数立即执行，没有惰性。即在实例加载的第一次就会执行一次回调函数
+            // watchEffect会自动检测所注入到这个回调函数的依赖，
+            // 如果有任意一个依赖改变,watchEffect就会立即执行回调函数
+            const name = ref('')
+            // watchEffect会返回一个stop函数
+            // 执行stop函数，会撤销当前的监听器
+            const stop = watchEffect(() => {
+                console.log(name.value)
+            })
+            setTimeout(() => {
+                // 2秒后执行stop函数
+                // 撤销当前监听器
+                stop()
+            }, 2000)
+            return {
+                name
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

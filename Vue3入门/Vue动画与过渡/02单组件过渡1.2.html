@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02单组件过渡1.2</title>
+    <style>
+        @keyframes shake {
+            0% {
+                transform: translateX(-100px);
+            }
+
+            50% {
+                transform: translateX(-50px)
+            }
+
+            100% {
+                transform: translateX(0px);
+            }
+        }
+
+        .v-enter-from {
+            /* 元素入场时刻的样式 */
+            opacity: 0;
+        }
+
+        .v-enter-active {
+            /* 覆盖元素入场全程中的样式属性，
+                我们定义它的animation & transition
+             */
+            animation: shake 1s ease;
+            transition: opacity 3s ease;
+        }
+
+        .v-enter-to {
+            /* 元素入场完成时刻的样式 */
+            opacity: 1;
+        }
+
+        .v-leave-from {
+            /* 元素离场的初始时刻 */
+            opacity: 1;
+        }
+
+        .v-leave-active {
+            /* 覆盖元素离场全程 */
+            animation: shake 1s ease reverse;
+            transition: opacity 3s ease;
+        }
+
+        .v-leave-to {
+            /* 元素离场的初始时刻结束 */
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <!-- 
+            你就需要使用 type attribute 并设置 animation 或 transition 来明确声明你需要 Vue 监听的类型。
+            transition: 只要过渡效果完成，就立刻停止动画效果,（以过渡效果为准）
+            animation: 只要动画效果完成，就立刻停止过渡效果（以动画效果为准）
+         -->
+        <transition type="animation" :duration="{ enter: 500, leave: 800 }">
+            <!-- 给transition绑定一个duration表达式，
+                它可以只是一个数值，那么会应用到入场和离场
+                它也可以是一个对象，分别控制入场时间和离场所用时间
+            -->
+            <div v-if="show">hello world</div>
+        </transition>
+        <button @click="handleClick">点击</button>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: true
+            }
+        },
+        methods: {
+            handleClick() {
+                this.show = !this.show
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04Mutation入门</title>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{count}}</h1>
+        <button @click="add">add</button>
+        <button @click="addObject">addObject</button>
+        <button @click="addAlias">addAlias</button>
+        <button @click="addObjectAlias({hello:'nihao'})">addObjectAlias</button>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script src="../lib/vuex.js"></script>
+<script>
+    const store = new Vuex.Store({
+        state: {
+            count: 1,
+        },
+        // 每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。
+        // 向store.commit这个事件就会触发这个回调函数，
+        mutations: {
+            //回调函数总会接受 state 作为第一个参数
+            incrementOne(state) {
+                state.count += 1
+            },
+            // 这个回调函数可以传入额外一个参数，荷载(payload)
+            increment(state, payload) {
+                // state.count += payload.amount
+                console.log(payload)
+            }
+        }
+    })
+    let vm = new Vue({
+        el: '#app',
+        store,
+        data() {
+            return {
+                payload: {
+                    amount: 10
+                }
+            }
+        },
+        methods: {
+            //函数提交风格
+            add() {
+                this.$store.commit('incrementOne', this.payload)
+            },
+            //对象提交风格
+            addObject() {
+                //直接使用包含 type 属性的对象
+                //当使用对象风格的提交方式，整个对象都作为载荷传给 mutation 函数
+                this.$store.commit({
+                    // 这里的type会被对应到mutations方法名中去
+                    type: 'increment',
+                    amount: 10,
+                    hello: 'world',
+                    you: 'love'
+                })
+            },
+            ...Vuex.mapMutations({
+                addAlias: 'incrementOne',
+                addObjectAlias: 'increment',
+            })
+
+        },
+        computed: {
+            count() {
+                return this.$store.state.count
+            }
+        }
+    })
+</script>
+
+</html>

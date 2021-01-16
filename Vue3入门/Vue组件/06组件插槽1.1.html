@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06组件插槽1.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                text: "hello world"
+            }
+        },
+        template: `
+            <div>
+                <test>
+                    <!-- 
+                        具名插槽
+                        1. 这里v-slot要使用v-slot:slotName语法来进行绑定
+                        2. 要把v-slot放在template,或者组件上，代表在逻辑上这是一个模块
+
+                        // v-slot:header 可以简写成#header    
+
+                     -->
+                    <template #header>
+                        <div>header</div>
+                    </template>
+
+                    <template #footer>
+                        <div>footer</div>
+                    </template>
+
+                </test>
+            </div>
+        `
+    })
+    app.component('test', {
+        template: `
+        <div>
+            <slot name="header"></slot>
+            <div>content</div>
+            <slot name="footer"></slot>
+        </div>
+        `,
+        methods: {
+            handleSay() {
+                alert('123')
+            }
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

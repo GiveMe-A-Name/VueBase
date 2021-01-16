@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06组件插槽1.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    // ref 是写在模板元素/组件上的一个特定属性
+    // refName用来标记这个元素/组件对应的dom节点
+    // 我们在组件mounted方法里面可以通过this.$refs.refName来进行引用相应的Dom节点/子组件
+    // 来真实的操作这个dom节点，或者操作子组件
+    // 所以this.$refs是一个包含所有被ref标记的dom节点/子组件的一个容器对象
+    const app = Vue.createApp({
+        mounted() {
+            console.log(this.$refs.mydiv)
+            console.log(this.$refs.mytest)
+        },
+        template: `
+            <div>
+                <div ref="mydiv">hello js</div> 
+                <test ref="mytest" />  
+            </div>
+        `
+    })
+    app.component('test', {
+        methods: {
+            handleClick() {
+                console.log('click')
+            }
+        },
+        template: `<div @click="handleClick">My test</div>`
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

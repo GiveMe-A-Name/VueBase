@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01Setup&props</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <book :title="msg"></book>
+        <button @click="msg='nihaopya '"></button>
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                msg: 'hello vue'
+            }
+        },
+
+    })
+    app.component('book', {
+        props: ['title'],
+        // 
+        setup(props) {
+            console.log(props.title)
+        },
+        template: `<div>{{title}}</div>`
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

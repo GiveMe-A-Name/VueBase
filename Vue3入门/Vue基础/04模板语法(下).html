@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04常用指令(上)</title>
+    <style>
+        .aqua {
+            background-color: aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                msg: '<strong>Hello </strong>',
+                attr: 'title',
+                mydata: 'MyDiv',
+                eventName: 'focus',
+                color: false,
+            }
+        },
+        methods: {
+            click() {
+                console.log(`click`)
+            },
+            doSomething() {
+                /* 
+                    通过动态参数，我们可以实现一个功能，
+                    只使用一个函数，在不同的时间时刻，我们可以给元素绑定不同的事件，
+                    也就代表这个函数可以由不同的时间进行触发。
+                */
+                if (this.eventName === 'focus') {
+                    this.color = true
+                    this.eventName = 'blur'
+                }
+                else if (this.eventName === 'blur') {
+                    this.color = false
+                    this.eventName = 'focus'
+                }
+            }
+
+        },
+        // 模板中的属性名也可以使用ES6新增的匹配语法
+        // @click.prevent先阻止浏览器默认行为，之后去执行我的逻辑代码
+        template: `<div>
+        <div v-html="msg" :[attr]='mydata'></div>
+        <form @click.prevent="click">
+            <input type="submit" value="Submit">
+        </form>
+        <h4>&nbsp;eventName预期绑定的是字符串，如果不是字符串是报错&nbsp;</h4>
+        <input v-on:[eventName]="doSomething" :class="{'aqua':color}" />
+        </div>`,
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

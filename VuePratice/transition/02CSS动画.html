@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02CSS动画</title>
+    <style>
+        .v-enter-active {
+            animation: showthis .5s;
+        }
+
+        .v-leave-active {
+            animation: showthis .5s reverse;
+        }
+
+        @keyframes showthis {
+            0% {
+                opacity: 0;
+                color: #fff;
+            }
+
+            50% {
+                opacity: 0.5;
+                color: aquamarine;
+            }
+
+            100% {
+                opacity: 1;
+                color: aqua;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="show = !show">show</button>
+        <!-- 使用过渡标签，封装起来 -->
+        <transition>
+            <p v-if="show">hello vue!</p>
+        </transition>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                show: true
+            }
+        },
+    })
+</script>
+
+</html>

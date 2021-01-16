@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>01动态路由</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 匹配/login/:id  params{'id':12;}-->
+    <router-link to="/login/12" tag="li">login</router-link>
+    <router-link to="/register" tag="div">register</router-link>
+    <router-view></router-view>
+  </div>
+</body>
+<script src="../../lib/vue.js"></script>
+<script src="../../lib/vue-router.js"></script>
+<script>
+  //  $route 和 $router 的区别
+  // $router是一个整个Vue实例拥有的路由对象
+  // $route 是每个组件都拥有各自的路由信息对象
+
+  const login = {
+    render(h) {
+      return h('div', [h('h1', 'login')])
+    },
+    created() {
+      //打印这个组件的route
+      console.log(this.$route)
+    },
+    watch: {
+      //当传入的id发送变化，但组件没有发生变化，组件会进行复用
+      //这也就意味着不会触发钩子函数；
+      //只是$route对象的改动
+      $route(to, from) {
+        console.log('to: ', to)
+        console.log('from: ', from)
+      },
+    },
+  }
+  const register = {
+    render(h) {
+      return h('div', [h('h1', 'register')])
+    },
+    created() {
+      console.log(this.$route)
+    },
+  }
+
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {}
+    },
+    router: new VueRouter({
+      routes: [
+        {
+          path: '/login/:id',
+          name: 'login',
+          component: login,
+        },
+        {
+          path: '/register',
+          name: 'register',
+          component: register,
+        },
+      ],
+    }),
+  })
+</script>
+
+</html>

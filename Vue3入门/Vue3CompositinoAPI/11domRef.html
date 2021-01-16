@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11domRef</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!-- 定义ref给dom节点命名 -->
+        <div ref="hello">hello world</div>
+
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        setup(props) {
+            const { onMounted, ref } = Vue
+            // 通过定义一个null，且与dom节点命名相同的变量
+            // 那么在挂载之后,这个hello.value 就是dom节点
+            const hello = ref(null)
+            onMounted(() => {
+                setTimeout(() => {
+                    // 这样我就通过操作真实DOM来修改页面内容
+                    hello.value.innerHTML = 'hello'
+                }, 1000)
+            })
+            return {
+                hello
+            }
+        }
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

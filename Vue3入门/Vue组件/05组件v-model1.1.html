@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04父子组件通信1.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    // 多项属性的父子组件双向绑定
+    const Hello = {
+        // 接收从父组件绑定的数据，给app1,app2,
+        props: ['app1', 'app2'],
+        template: `
+        <div @click="handleClick1">{{app1}}</div>
+        <div @click="handleClick2">{{app2}}</div>
+        `,
+        methods: {
+            handleClick1() {
+                // 子组件抛出update:app1事件，它传递的参数会被传递到count1中
+                this.$emit('update:app1', this.app1 + 3)
+            },
+            handleClick2() {
+                // 子组件抛出update:app2事件，它传递的参数会被传递到count2中
+                this.$emit('update:app2', this.app2 + 4)
+            }
+
+        }
+
+    }
+    const app = Vue.createApp({
+        data() {
+            return {
+                count1: 1,
+                count2: 2,
+            }
+        },
+        // 使用v-model进行子组件和父组件传值的语法糖
+        // count1绑定到props:app1,count2绑定到props:app2中
+        template: `<hello v-model:app1="count1"  v-model:app2="count2"/>`,
+        components: {
+            Hello
+        },
+
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

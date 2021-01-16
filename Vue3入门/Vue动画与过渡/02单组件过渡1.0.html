@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02单组件过渡1.0</title>
+    <style>
+        @keyframes shake {
+            0% {
+                transform: translateX(-100px);
+            }
+
+            50% {
+                transform: translateX(-50px)
+            }
+
+            100% {
+                transform: translateX(0px);
+            }
+        }
+
+        .v-enter-from {
+            /* 元素入场时刻的样式 */
+            opacity: 0;
+        }
+
+        .v-enter-active {
+            /* 覆盖元素入场全程中的样式属性，
+                我们定义它的animation & transition
+             */
+            animation: shake 1s ease;
+            transition: opacity 1s ease;
+        }
+
+        .v-enter-to {
+            /* 元素入场完成时刻的样式 */
+            opacity: 1;
+        }
+
+        .v-leave-from {
+            /* 元素离场的初始时刻 */
+            opacity: 1;
+        }
+
+        .v-leave-active {
+            /* 覆盖元素离场全程 */
+            animation: shake 1s ease reverse;
+            transition: opacity 1s ease;
+        }
+
+        .v-leave-to {
+            /* 元素离场的初始时刻结束 */
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <transition>
+            <div v-show="show">hello world</div>
+        </transition>
+        <button @click="handleClick">点击</button>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: true
+            }
+        },
+        methods: {
+            handleClick() {
+                this.show = !this.show
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

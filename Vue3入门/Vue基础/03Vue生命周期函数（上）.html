@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03Vue生命周期函数（上）</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    // 生命周期函数：在某一时刻自动执行的函数
+    const app = Vue.createApp({
+        data() {
+            return {
+                msg: 'hello Vue'
+            }
+        },
+        template: `<div>{{msg}}</div>`,
+        // 1.先做逻辑分析初始化
+        // 实例生成之前会自动执行beforeCreated
+        beforeCreate() {
+            // Vue中data还是空对象，还没有被初始化
+            console.log(`beforeCreate`, this.$data)
+        },
+        // 2. 分析数据和模板的绑定 , 响应注册，依赖收集
+        // 实例生成之后自动执行created
+        created() {
+            // Vue中data以及被初始化，
+            console.log(`created`, this.$data)
+        },
+        // 3. 模板编译成渲染函数render
+        // 模板编译之后自动执行beforeMount
+        beforeMount() {
+            // Vue还没有把虚拟DomTree,patch到真实Dom去
+            console.log(`beforeMount`, document.getElementById('root').innerHTML)
+        },
+        // 4. 把虚拟dom替换掉真实dom
+        // 执行patch函数之后执行mounted
+        mounted() {
+            // Vue已经把虚拟DomTree，挂载到了真实DOM节点上去
+            console.log(`mounted`, document.getElementById('root').innerHTML)
+        }
+
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

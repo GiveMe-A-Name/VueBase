@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07Vue动态组件</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <template v-for="(item,index) in currentTabComponent" :key="index">
+            <!-- v-for进行循环，把组件名称绑定在component标签上，就能渲染出这个组件 -->
+            <!-- component可以代表一个虚组件，等到给他is属性绑定上组件名称的时候就会渲染出指定的组件。 -->
+            <component :is="item"></component>
+        </template>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+    // 设置组件的名称
+    const c1 = {
+        template: '<h1>Component1</h1>'
+    }
+    const c2 = {
+        template: '<h1>Component2</h1>'
+    }
+    const c3 = {
+        template: '<h1>Component3</h1>'
+    }
+    let vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                // 组件的顺序，或者可以说组件的标记数组
+                componentArray: [1, 2, 3, 1, 2, 2],
+            }
+        },
+        methods: {
+        },
+        components: {
+            myComponent1: c1,
+            myComponent2: c2,
+            myComponent3: c3,
+        },
+        computed: {
+            currentTabComponent() {
+                // 计算属性，循环从标记数组取出数字，然后和myComponent组合，组合成组件的名称。
+                // 这样就返回一个组件名的数组
+                return this.componentArray.map(item => {
+                    return 'myComponent' + item;
+                })
+            }
+        },
+    })
+</script>
+
+</html>

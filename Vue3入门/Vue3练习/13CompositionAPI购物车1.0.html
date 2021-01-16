@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13CompositionAPI购物车1.0</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <table>
+            <thead>
+                <th>编号</th>
+                <th>商品名称</th>
+                <th>价格</th>
+                <th>数量</th>
+            </thead>
+            <tbody>
+                <tr v-is="'my-good'" v-for="(good,index) in goods" :good="good" :key="index" :id="index+1"
+                    @good-sub="handleSub(index)" @good-add="handleAdd(index)"></tr>
+                <tr>
+                    <td></td>
+                    <td><input type="text" v-model="goodName"></td>
+                    <td><input type="text" v-model.number="goodPrice"></td>
+                    <td><button @click="Add" @click="Add">添加</button></td>
+                </tr>
+            </tbody>
+        </table>
+        {{total}}
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+
+    // 关于货物列表，和监听到的good-sub,good-add相关操作
+    const aboutGoods = function () {
+        const { reactive } = Vue
+        const goods = reactive([
+            { name: '小米手机1', price: 1000, count: 0 },
+            { name: '小米手机2', price: 1100, count: 0 },
+            {
+                name: '小米手机3', price: 1000 + 200, count: 0
+            },
+            { name: '小米手机4', price: 1000 + 300, count: 0 },
+            { name: '小米手机5', price: 1000 + 400, count: 0 },
+        ])
+        const { handleAdd, handleSub } = {
+            handleAdd(index) {
+                // console.log(`handleAdd`)
+                goods[index].count++
+            },
+            handleSub(index) {
+                goods[index].count--
+            }
+        }
+        return {
+            goods,
+            handleAdd,
+            handleSub
+        }
+    }
+    // 对于货物总价值的计算
+    const aboutComputed = function (goods) {
+        const { computed } = Vue
+        return {
+            total: computed(() => {
+                let sum = 0
+                for (let i = 0; i < goods.length; i++) {
+                    sum += goods[i].price * goods[i].count
+                }
+                return sum
+            })
+        }
+    }
+    // 关于input框添加货物
+    const aboutInputGood = function (goods) {
+        const { ref } = Vue
+        const [goodName, goodPrice] = [ref(''), ref('')]
+        return {
+            goodName,
+            goodPrice,
+            Add: function () {
+                goods.push({
+                    name: goodName.value,
+                    price: goodPrice.value,
+                    count: 0,
+                })
+            }
+        }
+    }
+    const app = Vue.createApp({
+        setup(props) {
+            const { computed } = Vue
+            const { goods, handleAdd, handleSub } = aboutGoods()
+            const { total } = aboutComputed(goods)
+            const { goodName, goodPrice, Add } = aboutInputGood(goods)
+            return {
+                goods,
+                handleSub,
+                handleAdd,
+                total,
+                goodName,
+                goodPrice,
+                Add
+            }
+        },
+    })
+    // 点击子组件按钮，通过emit把事件方向抛给父组件
+    const aboutMyGoodEmit = function (emit) {
+
+        return {
+            GoodSub() {
+                emit('goodSub')
+            },
+            GoodAdd() {
+                emit('goodAdd')
+            }
+        }
+    }
+    app.component('MyGood', {
+        props: {
+            good: Object,
+            id: Number
+        },
+        template: `
+            <tr>    
+                <td>{{id}}</td>
+                <td>{{good.name}}</td>
+                <td>{{good.price}}</td>
+                <td>
+                    <button :disabled="good.count<1" @click="GoodSub">-</button>
+                    {{good.count}}
+                    <button @click="GoodAdd">+</button>
+                </td>
+
+            </tr>
+        `,
+        setup(props, context) {
+            const { emit } = context
+            const { GoodSub, GoodAdd } = aboutMyGoodEmit(emit)
+            return {
+                GoodSub,
+                GoodAdd,
+            }
+        }
+
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

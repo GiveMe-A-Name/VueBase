@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04常用指令(上)</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    /* 
+        指令 (Directives) 是带有 v- 前缀的特殊 attribute。
+        指令 attribute 的值预期是单个 JavaScript 表达式
+        v-if="seen", seen预期为单个javascrip表达式
+    */
+    const app = Vue.createApp({
+        data() {
+            return {
+                msg: '<strong>Hello </strong>',
+                count: 1,
+            }
+        },
+        // 以html的形式去展示我的数据，数据标签就会被解析成html，会替换成插入指定元素的innerHTML
+        // v-once 数据只渲染一次，这意味着当数据改变的时候，View层不会做响应式的更改
+        // v-once的作用域是一整个div标签，
+        template: `<div v-once>{{count}} <span v-html="msg"></span> </div>`,
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

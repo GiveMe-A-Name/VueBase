@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04父子组件通信1.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const Hello = {
+        props: {
+            'modelValue': Number
+        },
+        template: `<input v-model="value">`,
+        computed: {
+            value: {
+                get() {
+                    return this.modelValue
+                },
+                set(value) {
+                    this.$emit('update:modelValue', value)
+                }
+            }
+        }
+    }
+    const app = Vue.createApp({
+        data() {
+            return {
+                count: 1,
+            }
+        },
+        // 使用v-model进行子组件和父组件传值的语法糖
+        // 绑定到app这个props
+        template: `<div><hello v-model.number="count" /><h1>{{count}}</h1></div>`,
+        components: {
+            Hello
+        },
+
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01Mixin</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        {{count}}
+        <h1 @click="handleClick">{{number}}</h1>
+        <my-button />
+    </div>
+</body>
+<script>
+    // Mixin 是一个混入的概念
+    // myMixin是一个对象，我可以通过一个组件中mixins数组把这个对象混入到组件中去
+    // 也就是说Vue会将myMixin定义的data,methods插入到组件中的data,methods中去
+    // 那么当其中有冲突的时候,Vue是怎么处理的呢?
+    // 1. 组件中的data,methods等属性的优先级是高于mixins中的,
+    // 2. 组件的生命周期函数和mixins对象是不进行冲突,都会执行,但mixins中定义的
+    // 这里我们定义的是局部Mixin
+    const myMixinFirst = {
+        data() {
+            return {
+                count: 1
+            }
+        },
+        methods: {
+            handleClick() {
+                console.log(`myMixin handleClick`)
+            }
+        },
+        mounted() {
+            console.log(`myMixinFirst mounted`)
+        },
+    }
+    const myMixinSecond = {
+        mounted() {
+            console.log(`myMixinSecond mounted`)
+        },
+    }
+    const app = Vue.createApp({
+        data() {
+            return {
+                number: 2
+            }
+        },
+        mixins: [myMixinSecond, myMixinFirst],
+        methods: {
+            handleClick() {
+                console.log(`handleClick`)
+            }
+        },
+        mounted() {
+            console.log(`mounted`)
+        },
+    })
+    app.component('my-button', {
+        template: `<button @click="handleSay">mybutton</button>`,
+        methods: {
+            handleSay() {
+                console.log(`hello`)
+            }
+        },
+    })
+
+    // 这里是全局混入
+    // 当全局混入的时候vue当前实例的所有组件都会被混入该混入对象
+    app.mixin({
+        mounted() {
+            console.log(`hello 我是全局混入`)
+        }
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

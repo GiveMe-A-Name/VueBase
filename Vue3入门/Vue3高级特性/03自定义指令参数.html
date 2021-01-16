@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../libs/vue.global.js"></script>
+    <style>
+        .header {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div v-pos:abc="top" class="header">hello pos</div>
+    </div>
+</body>
+<script>
+    // 自定义指令接收参数
+    const app = Vue.createApp({
+        data() {
+            return {
+                top: 200,
+            }
+        },
+    })
+    app.directive('pos', {
+        // 这个定义的binding是一个对象
+        // 里面有两个比较重要的属性1. oldValue, 2. value
+        // 在外面template定义模板的时候，我们可以通过给指令绑定值，把值传递给value
+        mounted(el, binding) {
+            console.log(binding.value)
+            console.log(binding.arg)
+            console.log(binding)
+            el.style.top = binding.value + 'px';
+
+        },
+        // 这里监听每次更新的时候数据，
+        // 原来值放在binding对象中的oldValue中
+        // 更新的值放在binding对象中的value中
+        updated(el, binding) {
+            console.log(arguments[1])
+            el.style.top = binding.value + 'px';
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

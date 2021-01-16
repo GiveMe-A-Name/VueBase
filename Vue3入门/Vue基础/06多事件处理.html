@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+        <!-- 事件处理程序中可以有多个方法，这些方法由逗号运算符分隔。但不能省略括号了 -->
+        <button @click="f1(),f2()">{{hello}}</button>
+        <input type="text" @keyup.enter="keyup" @keydown.enter="keyup">
+        <!-- 监听鼠标左键，右键，中键触发事件 -->
+        <div @click.left="left" @click.right.prevent="right" @click.middle="middle">clickit</div>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                title: 'hello',
+                hello: 'js',
+            }
+        },
+        methods: {
+            f1() {
+                console.log(`f1`)
+            },
+            f2() {
+                console.log(`f2`)
+            },
+            keyup(event) {
+                console.log(event.type)
+                console.log(event.code, event.key)
+            },
+            left() {
+                console.log(`Clickleft`)
+            },
+            right() {
+                console.log(`Clickright`)
+            },
+            middle() {
+                console.log(`Clickmiddle`)
+            }
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

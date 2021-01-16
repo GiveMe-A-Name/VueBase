@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01state入门</title>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{count}}</h1>
+        <h1>{{countAlias}}</h1>
+        <h1>{{otherCount}}</h1>
+        <button @click="add">add</button>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script src="../lib/vuex.js"></script>
+<script type="module">
+
+    const store = new Vuex.Store({
+        state: {
+            count: 0
+        },
+        mutations: {
+            increase(state) {
+                state.count++
+            }
+        }
+    })
+    let vm = new Vue({
+        el: '#app',
+        store,
+        data() {
+            return {
+                msg: ' hello '
+            }
+        },
+        // mapState 辅助函数
+        // mapState 辅助函数帮助我们生成计算属性
+        computed: Vuex.mapState({
+            count: state => state.count,
+            countAlias: 'count',
+            otherCount: function (state) {
+                return this.msg + state.count
+            }
+        }),
+        methods: {
+            add() {
+                this.$store.commit('increase')
+            }
+        },
+    })
+</script>
+
+</html>

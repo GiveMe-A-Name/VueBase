@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>09下拉菜单</title>
+    <style>
+        .menu {
+            width: 100px;
+            height: 40px;
+            /* overflow: hidden; */
+        }
+
+        .menu-btn {
+            width: inherit;
+            height: inherit;
+            border-radius: 50px;
+            background-color: rgb(35, 139, 22);
+            box-shadow: 2px 2px 3px grey;
+            opacity: .9;
+            color: #fff;
+        }
+
+
+        .v-enter-from,
+        .v-leave-to {
+            height: 0px;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .v-enter-to,
+        .v-leave-from {
+            height: 100px;
+            overflow: hidden;
+            opacity: 1;
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 0.5s ease-in;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div class="menu">
+            <button @mouseenter="show = !show" @mouseout="show = !show" class="menu-btn">点击</button>
+            <transition appear>
+                <ul v-show="show">
+                    <todo-list v-for="(text,index) in myLists" :key="index" :msg="text" />
+                </ul>
+            </transition>
+        </div>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                myLists: ['Video', 'Game', 'Brower', 'VsCode'],
+                show: false,
+            }
+        },
+    })
+    app.component('todo-list', {
+        props: {
+            msg: String,
+        },
+        template: `<li> {{msg}} </li>`
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

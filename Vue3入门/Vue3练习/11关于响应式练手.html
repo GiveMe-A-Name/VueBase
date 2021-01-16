@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11关于响应式练手</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        {{name}}
+
+    </div>
+</body>
+<script>
+    const app = Vue.createApp({
+        setup(props, context) {
+            const { ref, reactive, toRefs } = Vue
+            // 把一个基础值封住，封装成一个响应式对象，
+            // 只是响应式对象内部暴露value属性，并且外部引用的时候直接引用这个value值，而不是引用这个对象
+            let name = ref("xiaoming")
+            // reactive是把传入的对象封装成一个proxy，
+            // 在set,get的时候进行拦截
+            let obj = reactive({
+                name: "xiaohong",
+                age: 18,
+                sex: "man"
+            })
+            // toRefs直接把封装好的proxy内的target进行解构，并且再ref封装，之后重组成一个对象
+            let refsObj = toRefs(obj)
+            return {
+                name,
+                refsObj
+            }
+
+        },
+        beforeMount() {
+            console.log(this.refsObj)
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

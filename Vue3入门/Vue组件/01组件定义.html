@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01组件定义</title>
+</head>
+
+<body>
+    <div id="root">
+        <my-component1></my-component1>
+        <my-component2></my-component2>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    // 建立一个组件对象
+    const MyComponent1 = {
+        template: `<h1> hello component1 </h1>`
+    }
+    const app = Vue.createApp({
+        components: {
+            // 注册这个组件对象，将他注册为子组件，
+            // 只需要在需要的时候注册该子组件，不需要的时候，他只是一个全局对象，所以效率高
+            MyComponent1
+        },
+    })
+    // 直接把组件注册给Vue实例，
+    // 这个是全局注册，不管有没有用都会挂载到app中，效率不高
+    app.component('MyComponent2', {
+        template: `<h2> hello component2 </h2>`,
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

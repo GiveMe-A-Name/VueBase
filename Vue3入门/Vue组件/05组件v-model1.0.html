@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04父子组件通信2.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const Hello = {
+        // 接受父组件传递过来的属性，默认使用modelValue接收
+        props: ['modelValue'],
+        template: `<div @click="handleClick">{{modelValue}}</div>`,
+        methods: {
+            handleClick() {
+                // 默认使用update:modelValue，this.modelValue + 3响应式的替换modelValue
+                // 将app这个props抛出去，让父组件监听
+                this.$emit('update:modelValue', this.modelValue + 3)
+            }
+        }
+    }
+    const app = Vue.createApp({
+        data() {
+            return {
+                count: 1,
+                searchText: ''
+            }
+        },
+        // 使用v-model进行子组件和父组件传值的语法糖
+        // 绑定到app这个props
+        template: `<hello :model-value="count" @update:model-value="update"   />`,
+        components: {
+            Hello
+        },
+        methods: {
+            update(event) {
+                console.log(event)
+                this.count = event
+            }
+        }
+
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

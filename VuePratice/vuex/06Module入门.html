@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06Module入门</title>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="show">show</button>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script src="../lib/vuex.js"></script>
+<script>
+    /* 
+        Vuex 允许我们将 store 分割成模块（module）。
+        每个模块拥有自己的 state、mutation、action、getter、
+     */
+    const moduleA = {
+        state: () => ({
+            count: 0
+        }),
+        mutations: {
+
+        }
+    }
+    const moduleB = {
+        state: () => ({
+            count: 1
+        }),
+        mutations: {
+
+        }
+    }
+
+    const store = new Vuex.Store({
+        modules: {
+            a: moduleA,
+            b: moduleB
+        }
+    })
+    let vm = new Vue({
+        el: '#app',
+        store,
+        methods: {
+            show() {
+                console.log(this.$store.state.a.count)
+                console.log(this.$store.state.b.count)
+            }
+        },
+    })
+</script>
+
+</html>

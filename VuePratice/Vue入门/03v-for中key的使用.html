@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03v-for中key的使用</title>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+    body{
+      height: 100vh;
+      margin: 0;
+      display: 0;
+      display: flex;
+      justify-content:center;
+      align-items:center;
+    }
+    #app > div > input{
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <div>
+      ID: <input type="text" v-model.trim.number="id">
+      Name: <input type="text" v-model.trim="name">
+      <input type="button" value="submit" @click="submit">
+    </div>
+    <ul>
+      <li v-for="user in lists" :key="user.id">
+        {{user.id}} -- {{user.name}}
+      </li>
+    </ul>
+  </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+  let vm = new Vue({
+    el:'#app',
+    data() {
+      return {
+        id:'',
+        name:'',
+        lists:[
+                {id:1,name:"周杰伦"},
+                {id:2,name:"张杰"},
+                {id:3,name:"王力宏"},
+                {id:4,name:"林俊杰"},
+            ]
+      }
+    },
+    methods: {
+      submit(){
+        if(typeof this.id == 'number' && this.name){
+          this.lists.push({id:this.id,name:this.name})
+        }
+        return 
+      }
+    },
+  })
+</script>
+</html>

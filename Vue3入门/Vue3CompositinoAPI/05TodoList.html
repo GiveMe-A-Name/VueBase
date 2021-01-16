@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05TodoList1</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <input type="text" :value="inputValue" @input="handleInputChange">
+        <button @click="addItem(inputValue)">submit</button>
+        <ul>
+            <li v-for="(item,index) in lists" :key="index">
+                {{item}}
+            </li>
+        </ul>
+
+    </div>
+</body>
+<script>
+    const listRelativeEffect = () => {
+        const { reactive } = Vue
+        const lists = reactive([1, 5, 3])
+        const addItem = (value) => {
+            lists.push(value)
+        }
+        return {
+            lists,
+            addItem
+        }
+    }
+    const InputRelativeEffect = () => {
+        const { ref } = Vue
+        const inputValue = ref('')
+        const handleInputChange = function (e) {
+            inputValue.value = e.target.value
+        }
+        return {
+            inputValue,
+            handleInputChange
+        }
+    }
+
+    const app = Vue.createApp({
+        setup(props, context) {
+            const { lists, addItem } = listRelativeEffect()
+            const { inputValue, handleInputChange } = InputRelativeEffect()
+            return {
+                inputValue,
+                handleInputChange,
+                lists,
+                addItem
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

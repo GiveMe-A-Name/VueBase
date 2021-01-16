@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01render函数</title>
+</head>
+
+<body>
+    <div id="app">
+        <loginChild></loginChild>
+        <htmlbase></htmlbase>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+    // render是一个渲染函数，用来渲染createElement函数创造出来的Vnode
+    // 让我们看看是如何使用的
+    let htmlBase = {
+        // render函数是会传入一个h函数，也叫createElement函数
+        // 可以使用h函数来创建节点，会传入三个函数
+        // 1.标签名 2. 属性对象 3.子虚拟节点 (VNodes),注：数组或字符串形式
+        render(h) {
+            return h('div', {
+                // 绑定class属性，以true/false的形式进行创建
+                'class': {
+                    foo: true,
+                    bar: false
+                },
+                // 绑定样式属性,以对象的形式进行绑定。
+                style: {
+                    color: 'red',
+                    fontSize: '14px'
+                },
+                // 其他的普通规范的HTML attribute
+                attrs: {
+                    id: 'foo'
+                },
+            }, ['hello', 'js', h('h1', {
+                //给这个h1绑定dom属性，
+                domProps: {
+                    innerHTML: 'baz'
+                },
+            }, "这个是div的第三个孩纸")])
+        },
+    }
+    let loginBase = {
+        props: ['loginName', 'loginID'],
+        template: `<div>
+                    <h1>{{loginName}}</h1>
+                    <h1>{{loginID}}</h1>
+                </div>`
+    }
+    let loginChild = {
+        render(h) {
+            return h(loginBase, {
+                // 如果传入的是一个组件模板，
+                // 我们可以给这个组件传入props
+                props: {
+                    loginName: 'hello',
+                    loginID: 'Vue',
+                },
+                on: {
+                    click: function () {
+                        console.log(`click one`)
+                    }
+                }
+            })
+        },
+    }
+    let vm = new Vue({
+        el: '#app',
+        components: {
+            loginchild: loginChild,
+            htmlbase: htmlBase,
+        }
+    })
+</script>
+
+</html>

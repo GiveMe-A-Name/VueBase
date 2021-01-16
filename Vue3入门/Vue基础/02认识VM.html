@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02认识VM</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                msg: "hello"
+            }
+        },
+        template: `<div> {{msg}} </div>`
+    })
+    // mount 不返回应用本身。相反，它返回的是根组件实例。
+    // vm是Vue应用的根组件
+    // vm：视图数据连接层
+    const vm = app.mount('#root')
+    console.log(vm)
+</script>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06Computed</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <button @click="handleAdd">{{count}}</button>
+        {{countPrint}}
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        setup(props) {
+            const { ref, computed } = Vue
+            const count = ref(0)
+            const handleAdd = () => {
+                count.value += 1
+            }
+            // 计算属性
+            // 不仅可以根据依赖进行get
+            // 还可以设置set函数，对依赖进行赋值
+            let countPrint = computed({
+                // 设置get函数
+                get() {
+                    return count.value + 5
+                },
+                // 设置set函数，
+                // 在对这个计算属性，进行赋值的时候，我们自定义要如何进行操作
+                set(newValue) {
+                    count.value = newValue
+                    return true
+                }
+            })
+            setTimeout(() => {
+                countPrint.value = 1000
+            }, 1000)
+            return {
+                count,
+                handleAdd,
+                countPrint
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

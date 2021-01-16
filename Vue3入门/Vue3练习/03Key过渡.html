@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03Key过渡</title>
+    <style>
+        .v-enter-from,
+        .v-leave-to {
+            opacity: 0;
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: opacity .5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <input type="text" v-model="msg">
+        <transition mode="out-in">
+            <!-- 
+                这里把msg赋值给p的key。
+                每当msg都改变的时候，key就会相应的改变
+                由于tag相同，key不相同都触发p这个vnode进行patch更新，
+                否则只是更新#text节点内容
+            -->
+            <p :key="msg">{{msg}}</p>
+        </transition>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                msg: "hello world"
+            }
+        },
+
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

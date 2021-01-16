@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14CompositionAPITest</title>
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        setup(props) {
+            const { reactive, watch } = Vue
+            const obj = reactive({
+                name: 'xiaoming',
+                age: 18
+            })
+            watch(obj, (newVal, oldVal) => {
+                // console.log(newVal)
+                // console.log(oldVal)
+                const { name } = newVal
+                // console.log()
+
+            })
+            setTimeout(() => {
+                obj.name = 'hello worl.d'
+            }, 1000);
+            return {
+                obj
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

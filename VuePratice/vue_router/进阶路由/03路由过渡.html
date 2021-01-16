@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+    <style>
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 0.4s ease;
+        }
+
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/login">login</router-link>
+        <router-link to="/home">home</router-link>
+        <transition mode='out-in'>
+            <router-view></router-view>
+        </transition>
+    </div>
+</body>
+<script src="../../lib/vue.js"></script>
+<script src="../../lib/vue-router.js"></script>
+<script>
+    const home = {
+        render(h) {
+            return h('h1', 'home')
+        }
+    }
+    const login = {
+        render(h) {
+            return h('h1', 'login')
+        }
+    }
+    let vm = new Vue({
+        el: '#app',
+        router: new VueRouter({
+            routes: [
+                {
+                    path: '/login',
+                    component: login
+                },
+                {
+                    path: '/home',
+                    component: home,
+                }
+            ]
+        })
+    })
+
+</script>
+
+</html>

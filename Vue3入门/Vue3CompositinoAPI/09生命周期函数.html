@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>09生命周期函数</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        {{count}}
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        setup(props) {
+            const { ref } = Vue
+            // 下列引用都是生命周期函数，在setup内部的新写法
+            // 映入一个函数，传入回调函数
+            const { onBeforeMount, onMounted } = Vue
+            const { onBeforeUpdate, onUpdated } = Vue
+            const { onBeforeUnmount, onUnmounted } = Vue
+            // 响应式依赖收集
+            const { onRenderTracked, onRenderTriggered } = Vue
+            const count = ref(1)
+            // 生命周期们会接受回调函数，当钩子被组件调用的时候会被立即执行。
+            onBeforeMount(() => {
+                console.log(`onBeforeMount`)
+            })
+            onMounted(() => {
+                console.log(`onMounted`)
+            })
+
+
+            onBeforeUpdate(() => {
+                console.log(`onBeforeUpdate`)
+            })
+
+            onUpdated(() => {
+                console.log(`onUpdated`)
+            })
+
+            // 每次重新收集响应式依赖，包括第一次
+            onRenderTracked(() => {
+                console.log(`onRenderTracked`)
+            })
+            // 每次触发页面重新渲染式，都会进行执行
+            onRenderTriggered(() => {
+                console.log(`onRenderTriggered`)
+            })
+            return {
+                count
+            }
+        }
+
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05监听键盘</title>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+    body{
+      height: 100vh;
+      margin: 0;
+      display: 0;
+      display: flex;
+      justify-content:center;
+      align-items:center;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <input 
+    type="text" 
+    @keydown.enter="key"  
+    @keydown.tab="key" 
+    @keydown.esc="key" 
+    @keydown.space = "key"
+    @keydown.delete = "key"
+    @keydown.up = "key"
+    @keydown.down ="key"
+    @keydown.left = "key"
+    @keydown.right = "key"
+    >
+  </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+  let vm =new Vue({
+    el:'#app',
+    data() {
+      return {
+      }
+    },
+    methods: {
+      key(e){
+        console.log(e.code,e.key)
+      }
+    },
+  })
+
+  /*
+    @keydown.enter="key"  
+    @keydown.tab="key" 
+    @keydown.esc="key" 
+    @keydown.space = "key"
+    @keydown.delete = "key"
+    @keydown.up = "key"
+    @keydown.down ="key"
+    @keydown.left = "key"
+    @keydown.right = "key"
+  */
+</script>
+</html>

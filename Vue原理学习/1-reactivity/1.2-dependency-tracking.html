@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.2-dependency-tracking</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    const Dep = class Dep {
+        constructor() {
+            // 内部设置一个属性，是Set类型
+            this.subscribers = new Set()
+        }
+        depend() {
+            // 定义依赖方法，如果activeUpdate是非false，则将activeUpdate加入到收集者中
+            if (activeUpdate) {
+                this.subscribers.add(activeUpdate)
+            }
+        }
+
+        notify() {
+            // 循环执行依赖收集盒里面的函数
+            this.subscribers.forEach(subscriber => subscriber())
+        }
+    }
+    // 依赖收集器
+    const dep = new Dep()
+    let activeUpdate
+    function autorun(update) {
+        function wrappedUpdate() {
+            activeUpdate = wrappedUpdate
+            // 执行了一次，并且会注册一次；
+            update()
+            activeUpdate = null
+        }
+        wrappedUpdate()
+    }
+    autorun(() => {
+        dep.depend()
+        console.log('updated1，注册依赖1')
+    })
+    autorun(() => {
+        dep.depend()
+        console.log('update123, 注册依赖2')
+    })
+    // console.log(dep.subscribers)
+    dep.notify()
+
+</script>
+
+</html>

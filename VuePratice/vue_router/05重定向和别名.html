@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>05重定向和别名</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        body {
+            height: 100vh;
+            margin: 0;
+            display: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <router-link to="/login">login</router-link>
+        <router-link to="/register">register</router-link>
+        <router-link to="/home">home</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+
+    const login = {
+        render(h) {
+            return h('div', [h('h1', 'login')])
+        },
+
+    }
+    const register = {
+        render(h) {
+            return h('div', [h('h1', 'register')])
+        },
+    }
+
+    let vm = new Vue({
+        el: '#app',
+        data() {
+            return {}
+        },
+        router: new VueRouter({
+            routes: [
+                {
+                    path: '/login',
+                    name: 'login',
+                    component: login,
+                    alias: '/loginAlias',
+                    /* 
+                    别名
+                    /login 的别名是 /loginAlias，意味着，
+                    当用户访问 /loginAlias 时，URL 会保持为 /loginAlias，
+                    但是路由匹配则为 /login，就像用户访问 /login 一样。
+                     */
+                },
+                {
+                    path: '/register',
+                    name: 'register',
+                    component: register,
+                },
+                {
+                    path: '/home',
+                    // redirect: '/login',  重定向到指定路由
+                    redirect: {
+                        //重定向也可以是对象模式
+                        name: 'login',
+                        query: {
+                            'username': 'xiaoming',
+                        }
+                    }
+                },
+                {
+                    path: ''
+                }
+            ],
+        }),
+    })
+</script>
+
+</html>

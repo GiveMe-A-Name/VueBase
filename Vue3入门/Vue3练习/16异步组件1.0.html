@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16异步组件</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <component-async @disappear="show = false"></component-async>
+        <component-load v-if="show"></component-load>
+    </div>
+</body>
+<script>
+    const AsyncComp = Vue.defineAsyncComponent(
+        () =>
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve({
+                        template: '<div>I am async!</div>',
+                        mounted() {
+                            this.$emit('disappear')
+                        }
+                    })
+                }, 10000)
+            })
+    )
+    console.log(AsyncComp)
+    const LoadCompo = {
+        template: `<div>loading</div>`
+    }
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: true,
+            }
+        },
+    })
+    app.component('component-async', AsyncComp)
+    app.component('component-load', LoadCompo)
+    const vm = app.mount('#root')
+</script>
+
+</html>

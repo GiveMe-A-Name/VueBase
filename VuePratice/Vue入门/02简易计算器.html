@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02简易计算器</title>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <input type="text" v-model.number.lazy="val1">
+    <select v-model="opt">
+      <option value="+">+</option>
+      <option value="-">-</option>
+      <option value="*">*</option>
+      <option value="%">/</option>
+    </select>
+    <input type="text" v-model.number.lazy="val2">
+    <input type="text" v-model.number="ans">
+  </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+  new Vue({
+    el:'#app',
+    data() {
+      return {
+        val1: '',
+        val2: '',
+        opt:'+',
+      }
+    },
+    computed:{
+      //计算属性是基于它们的响应式依赖进行缓存的。只在相关响应式依赖发生改变时它们才会重新求值。
+      //这意味着，只要计算属性依赖一旦修改，它就会自动重新求值
+      //当然也可以使用watch属性来实现，但更好的选择是计算属性，这是由于它回监听它所依赖的全部属性，而不用手动添加
+      ans(){
+        if(!this.val1 || !this.val2)  return ``
+        return eval(`${this.val1} ${this.opt} ${this.val2}`)
+      }
+    }
+  })
+</script>
+</html>

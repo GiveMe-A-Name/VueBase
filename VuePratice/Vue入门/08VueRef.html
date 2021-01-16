@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08VueRef</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        body {
+            height: 100vh;
+            margin: 0;
+            display: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div ref="div1">
+            <p id="p1"></p>
+            <p id="p2"></p>
+        </div>
+        <div ref="div2"></div>
+        <span ref="span1"></span>
+        <span ref="span2"></span>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+
+    let vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+
+            }
+        },
+        mounted() {
+            /* 一个对象，持有注册过 ref attribute 的所有 DOM 元素和组件实例。
+                会把所有在视图中注册过ref属性的元素，
+                会把ref值作为key值， 元素示例作为value，
+                封装在vm.$refs对象中
+            */
+            console.log(this.$refs)
+
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03Getter入门</title>
+</head>
+
+<body>
+    <div id="app">
+        {{msg}}
+        <h1>{{getaddcount}}</h1>
+        <h2>{{getagaincount}}</h2>
+        <h3>{{getnumber('nihaoya ')}}</h3>
+        <button @click="add">add</button>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script src="../lib/vuex.js"></script>
+<script>
+    const store = new Vuex.Store({
+        state: {
+            count: 1,
+        },
+        mutations: {
+            increment(state) {
+                state.count++
+            }
+        },
+        /*  Vuex 允许我们在 store 中定义“getter”。
+            就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来，
+            且只有当它的依赖值发生了改变才会被重新计算。
+         */
+        getters: {
+            // 传入state为参数，返回state内部数据
+            getaddcount: state => {
+                return state.count + 100
+            },
+            // 可以传入state,getters对象当做数据，
+            // getters在vue内部封装成数据属性，对象。
+            getagaincount: (state, getters) => {
+                return getters.getaddcount + 100
+            },
+            // gernumber是一个属性，它的返回值就是它的属性值
+            // 借这个特性，可以把函数作为返回值，也就代表它返回的是一个函数
+            // 取得属性，就代表取得函数
+            getnumber: state => number => state.count + number
+
+        }
+    })
+
+    let vm = new Vue({
+        el: '#app',
+        store,
+        data() {
+            return {
+                msg: 'hello'
+            }
+        },
+        methods: {
+            add() {
+                this.$store.commit('increment')
+            }
+        },
+        computed: {
+            //返回的对象会被展开
+            ...Vuex.mapGetters(['getaddcount', 'getagaincount', 'getnumber'])
+        },
+    })
+</script>
+
+</html>

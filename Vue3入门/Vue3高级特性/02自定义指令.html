@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02自定义指令</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <div v-focus @click="count+=1" v-if="show">hello focus{{count}}</div>
+        <button v-pin @click="show = !show">click</button>
+
+    </div>
+</body>
+<script>
+    // 自定义指令 directive
+    // 为Vue template中的元素指定我们所需要的动作，而这种动作又是可复用的
+    // 同样的自定义指令有两种定义方式，全局自定义指令，和局部自定义指令
+    const directives = {
+        // 定义一个指令系统对象
+        myfocus: {
+            mounted(el) {
+                console.log(el)
+                console.log(`局部自定义指令`)
+            },
+        }
+    }
+    const app = Vue.createApp({
+        directives,
+        data() {
+            return {
+                count: 1,
+                show: true
+            }
+        },
+    })
+    // 全局定义
+    // 在指令系统里面有几个生命周期函数，和Vue实例的生命周期函数很类似
+    // beforeMount
+    // mounted
+    // beforeUpdate
+    // updated
+    // beforeUnmount
+    // unmounted
+    app.directive('focus', {
+        beforeMount() {
+            console.log(`beforeMount`)
+        },
+        mounted(el, binging, vnode) {
+            console.log(`mounted`)
+            console.log(binging.value, binging.oldValue, binging.arg)
+            console.log(vnode)
+        },
+        beforeUpdate() {
+            console.log(`beforeUpdate`)
+        },
+        updated() {
+            console.log(`updated`)
+        },
+        beforeUnmount() {
+            console.log(`beforeUnmount`)
+        },
+        unmounted() {
+            console.log(`unmounted`)
+        }
+    })
+    // 函数简写
+    // 在很多时候，你可能想在指令的 mounted 和 updated 时触发相同行为，而不关心其它的钩子。
+    app.directive('pin', (el, binding) => {
+        console.log(`在mounted和updated会同时执行`)
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02单组件过渡1.1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body style="overflow:hidden;">
+    <div id="root">
+        <!-- 
+            自定义class名字
+            我们可以在transition元素上给这个元素指定它过程中的样式 
+            而不是在css上进行名称绑定
+            可以很方便的引入第三方css动画库
+        -->
+        <transition enter-active-class="animate__animated animate__jello"
+            leave-active-class="animate__animated animate__jello">
+            <div v-if="show">hello world</div>
+        </transition>
+        <button @click="handleClick">点击</button>
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: true
+            }
+        },
+        methods: {
+            handleClick() {
+                this.show = !this.show
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

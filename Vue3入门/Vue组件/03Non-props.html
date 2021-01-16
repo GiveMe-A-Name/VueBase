@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03Non-props</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const MyComponent = {
+        // 在Vue3中支持多个根节点，但我们需要指明定义属性应该分布在哪里
+        props: ['msg'],
+        template:
+            // 所有父组件传递过来的Vue都会传递给第一个div，
+            //v-bind="$attrs"，意味着我把组件的属性(this.$attrs)绑定给你
+            `
+        <div v-bind="$attrs">hello {{msg}}</div>
+        <div>hello{{msg}} </div>
+        <div>hello{{msg}} </div>
+        `
+    }
+    const MyComponent2 = {
+        // 禁用自动进行 attribute 继承
+        // 若没有inheritAttrs置为false,且为单属性的话，就会自动从父组件继承attrs
+        inheritAttrs: false,
+        template: `
+            <div>
+                <!-- 将$attrs属性使用v-bind指令传递给input框 -->
+                <input type="text" v-bind="$attrs" /> 
+            </div>
+        `,
+    }
+    const app = Vue.createApp({
+        components: {
+            MyComponent,
+            MyComponent2
+        },
+        template: `
+        <div>
+            <my-component msg="nihao" style="color:red;"></my-component>
+            <my-component2 style="background:red;" />
+        </div>
+        `,
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

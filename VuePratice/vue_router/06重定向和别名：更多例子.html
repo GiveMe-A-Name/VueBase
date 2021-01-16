@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06重定向和别名：更多例子</title>
+</head>
+
+<body>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+    const Root = { template: '<div>root</div>' }
+    const Home = { template: '<div><h1>Home</h1><router-view></router-view></div>' }
+    const Foo = { template: '<div>foo</div>' }
+    const Bar = { template: '<div>bar</div>' }
+    const Baz = { template: '<div>baz</div>' }
+    const Default = { template: '<div>default</div>' }
+    const Nested = { template: '<router-view/>' }
+    const NestedFoo = { template: '<div>nested foo</div>' }
+    const routes = [
+        { path: '/root', component: Root, alias: '/root-alias' },
+        {
+            path: '/home', component: Home, children: [
+                { path: 'foo', component: Foo, alias: '/foo' },
+                { path: 'bar', component: Bar, alias: 'bar-alias' },
+                { path: 'baz', component: Baz, alias: ['/baz', 'baz-alias'] },
+                { path: 'default', component: Default, alias: '' },
+                {
+                    path: 'nested', component: Nested, alias: '/nested-alias', children: [
+                        { path: 'foo', component: NestedFoo }
+                    ]
+                }
+            ]
+        }
+    ]
+    let vm = new Vue({
+        el: '#app',
+        router: new VueRouter({
+            routes: routes
+        })
+    })
+</script>
+
+</html>

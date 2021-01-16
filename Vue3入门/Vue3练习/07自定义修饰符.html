@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07自定义修饰符</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                myText: '',
+            }
+        },
+        template: `
+            <div>
+                <!-- 
+                    通过修饰符，把capitalize传递给组件内modelModifiers这个对象
+                    modelModifiers对象= {
+                        capitalize: true,
+                    }
+                 -->
+                <my-component v-model.capitalize="myText" />
+                {{myText}}
+            </div>
+        `
+    })
+    app.component(`my-component`, {
+        props: {
+            modelValue: String,
+            //  默认情况下修饰符容器命名:modelModifiers，
+            /*  
+                对于带参数的 v-model 绑定，生成的 prop 名称将为 arg + "Modifiers"：
+                v-model:description => descriptionModifers
+            */
+            modelModifiers: {
+                default: () => ({})
+            }
+        },
+        emits: ['update:modelValue'],
+        methods: {
+            emitValue(e) {
+                let value = e.target.value
+                // 验证modelModifiers对象中的capitalize是否是true
+                if (this.modelModifiers.capitalize) {
+                    value = value.charAt(0).toUpperCase() + value.slice(1)
+                }
+                this.$emit('update:modelValue', value)
+            }
+        },
+        template: `
+            <input 
+                type="text" 
+                :value="modelValue"
+                @input="emitValue($event)"
+            >
+        `,
+        created() {
+            console.log(this.modelModifiers)
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

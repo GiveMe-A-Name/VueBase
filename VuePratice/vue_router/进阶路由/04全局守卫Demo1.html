@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script src="../../lib/vue.js"></script>
+<script src="../../lib/vue-router.js"></script>
+<script>
+    const componentA = {
+        render(h) {
+            return h('div', [h('h1', 'componentA')])
+        },
+    }
+    const componentB = {
+        render(h) {
+            return h('div', [h('h1', 'componentB')])
+        },
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/a',
+                component: componentA,
+            },
+            {
+                path: '/b',
+                component: componentB,
+            }
+        ],
+    })
+    router.beforeEach((to, from, next) => {
+        console.log(`beforeEach`)
+        console.log(to, from)
+        next()
+    })
+
+    router.afterEach((to, from) => {
+        console.log(`afterEach`)
+        console.log(to, from)
+    })
+    let vm = new Vue({
+        el: '#app',
+        router: router
+    })
+</script>
+
+</html>

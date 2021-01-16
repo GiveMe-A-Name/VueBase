@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05父子组件双向绑定</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                bookTitle: ''
+            }
+        },
+        template: `
+            <div>
+                <my-input v-model:title="bookTitle" style="color:red;" /> 
+                <p>{{bookTitle}}</p>
+            </div>
+        `
+    })
+    app.component('my-input', {
+        inheritAttrs: false,
+        props: ['title'],
+        template: `
+            <div>
+                <input :="$attrs" :value="title" @input="$emit('update:title',$event.target.value)">
+            </div>
+        `
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

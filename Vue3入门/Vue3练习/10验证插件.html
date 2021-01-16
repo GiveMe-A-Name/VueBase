@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10验证插件</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        账号:<input type="text" v-model.lazy="username" />
+        密码:<input type="password" v-model.lazy="password" />
+        <input type="button" value="确定">
+        {{msg}}
+    </div>
+</body>
+<script>
+    // 这里定义一个自己的插件
+    // 插件的定义方法还有另外一种方法
+    // 就是定义一个箭头函数，会接收两个参数一个app和options
+
+    const myValidateer = (app, options) => {
+        app.mixin({
+            mounted() {
+                // this.$options 用于查看当前组件实例的初始化选项。
+                for (let key in this.$options.rules) {
+                    const item = this.$options.rules[key]
+                    this.$watch(key, (value) => {
+                        const result = item.validate(value)
+                        if (result) {
+                            this.msg = item.message
+                        }
+                    })
+                }
+            }
+        })
+    }
+    const app = Vue.createApp({
+        data() {
+            return {
+                username: '',
+                password: '',
+                msg: ''
+            }
+        },
+        rules: {
+            username: {
+                validate: (value) => value.length < 4,
+                message: "username too short"
+            },
+            password: {
+                validate: (value) => value.length < 6,
+                message: 'password too short'
+            }
+        }
+    })
+    app.use(myValidateer)
+    const vm = app.mount('#root')
+</script>
+
+</html>

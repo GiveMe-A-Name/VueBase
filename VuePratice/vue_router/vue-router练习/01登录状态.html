@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div id='root'>
+        <router-link :to="{name:'login'}">login</router-link>
+        <router-link :to="{name:'register'}">register</router-link>
+        <router-link :to="{name:'home'}">home</router-link>
+        <router-view></router-view>
+    </div>
+
+    <template id='register'>
+        <form @submit.prevent="submit">
+            username: <input type="text" v-model="username">
+            password: <input type="password" v-model="password">
+            <input type="submit" value="submit">
+        </form>
+    </template>
+</body>
+<script src="../../lib/vue.js"></script>
+<script src="../../lib/vue-router.js"></script>
+<script>
+    const register = {
+        template: '#register',
+        data() {
+            return {
+                username: '',
+                password: ''
+            }
+        },
+        methods: {
+            submit() {
+                document.cookie = `username=${this.username}`
+                document.cookie = `password=${this.username}`
+            }
+        },
+    }
+
+    const login = {
+        template: '#register',
+        data() {
+            return {
+                username: '',
+                password: '',
+            }
+        },
+        methods: {
+            submit() {
+                let cookies = document.cookie.split(';')
+                let cookieObj = {}
+                for (let cookie of cookies) {
+                    let [key, value] = cookie.trim().split('=')
+                    cookieObj[key] = value
+                }
+                // console.log(cookieObj['username'], cookieObj['password'])
+                if (this.username === cookieObj['username'] && this.password === cookieObj['password']) {
+                    this.$router.push({
+                        name: 'home',
+                        query: {
+                            username: this.username,
+                            password: this.password
+                        },
+                    })
+                }
+
+            }
+        }
+    }
+    const home = {
+        props: ['username', 'password'],
+        template: `
+            <div>
+                <h1>{{username}}</h1>
+                <h2>{{password}}</h2>
+            </div>
+        `
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/login',
+                name: 'login',
+                component: login
+            },
+            {
+                path: '/register',
+                name: 'register',
+                component: register
+            },
+            {
+                path: '/home',
+                name: 'home',
+                component: home,
+                props: (route) => {
+                    return {
+                        username: route.query.username,
+                        password: route.query.password
+                    }
+                }
+            }
+        ],
+    })
+    const vm = new Vue({
+        el: '#root',
+        router,
+
+    })
+
+</script>
+
+</html>

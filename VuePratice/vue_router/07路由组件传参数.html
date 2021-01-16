@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07路由组件传参数</title>
+</head>
+
+<body>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script src="../lib/vue-router.js"></script>
+<script>
+    const User = {
+        render(h) {
+            return h('div', this.id)
+        },
+        props: {
+            id: String
+        }
+    }
+    let vm = new Vue({
+        el: '#app',
+        router: new VueRouter({
+            routes: [
+                //如果 props 被设置为 true，route.params 将会被设置为组件属性
+                { path: "/user/:id", component: User, props: true },
+
+                // 只适用于静态props
+                //如果 props 是一个对象，它会被按原样设置为组件属性。当 props 是静态的时候有用。
+                { path: "/user/hello/:id", component: User, props: { "id": "hello" } },
+                /* 
+                    你可以创建一个函数返回 props。
+                    这样你便可以将参数转换成另一种类型，将静态值与基于路由的值结合等等
+                 */
+                { path: '/search', component: User, props: (route) => ({ id: route.query.id }) }
+            ]
+        })
+    })
+</script>
+
+</html>

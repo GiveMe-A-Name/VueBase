@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06插件</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+</body>
+<script>
+    // plugin 封装一些通用的功能
+    const myPlugin = {
+        // 定义一个install(安装)函数
+        // 函数接收两个参数app,options
+        // 分别代表app实例，和app注册插件的时候会传递的参数
+        install(app, options) {
+            console.log(options.name);
+            app.provide('name', 'xiaoming')
+            app.mixin({
+                mounted() {
+                    console.log(`hello mixin`)
+                },
+            })
+            app.directive('focus', {
+                mounted(el) {
+                    el.focus()
+                }
+            })
+            app.component('my-button', {
+                template: `<button @click="handleSay">mybutton</button>`,
+                methods: {
+                    handleSay() {
+                        console.log(`hello`)
+                    }
+                },
+            })
+        }
+    }
+    const app = Vue.createApp({
+        inject: ['name'],
+        template: `<div>hello world <input type="text" v-focus />{{name}}<my-button /></div>`
+    })
+    app.use(myPlugin, {
+        // 这里传进去的对象会传入被插件的install中options参数
+        name: "hello world"
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

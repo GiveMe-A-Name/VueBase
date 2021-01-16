@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04Vue生命周期函数（下）</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    //  生命周期函数：在某一时刻自动执行的函数
+    const app = Vue.createApp({
+        data() {
+            return {
+                msg: 'hello js'
+            }
+        },
+        template: `<h1>{{msg}}</h1>`,
+        // 当data中的数据发送变化时，自动执行beforeUpdate
+        beforeUpdate() {
+            // 在View层更新之前
+            console.log(`beforeUpdate`, "<" + document.getElementById('root').innerText + ">")
+        },
+        // 当data中数据更新，同时页面中视图完成更新之后，updated完成执行
+        updated() {
+            // // 在View层更新之后
+            console.log(`updated`, "<" + document.getElementById('root').innerText + ">")
+        },
+        // 当Vue中从根Dom元素中脱载之前，自动执行beforeUnmount
+        beforeUnmount() {
+            // 在View层更新之前，Vue还没有把之前渲染的视图从View中脱离下来
+            console.log(`beforeUnmount`, "<" + document.getElementById('root').innerHTML + ">")
+        },
+        // 当Vue脱载后，Dom元素完全销毁之后，自动执行unmounted函数
+        unmounted() {
+            // 已经把View层中脱离下来
+            console.log(`unmounted`, "<" + document.getElementById('root').innerHTML + ">")
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

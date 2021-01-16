@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04库存管理</title>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+    body{
+      height: 100vh;
+      margin: 0;
+      display: 0;
+      display: flex;
+      justify-content:center;
+      align-items:center;
+    }
+    #app{
+      text-align:center;
+    }
+    table{
+      width: 100%;
+      border-collapse:collapse;
+      margin:30px auto;
+    }
+    table tr{
+      height:30px;
+      line-height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <h1>库存管理</h1>
+    <p>一共<strong>{{products.length}}</strong>件商品</p>
+    <button @click="dark = !dark">切换表格样式</button>
+    <table class="{'dark':dark}">
+      <th>
+        <td>商品名称</td>
+        <td>商品库存</td>
+        <td>商品操作</td>
+      </th>
+      <tr v-for="(product,index) in products" :key="index">
+        <td>{{index+1}}</td>
+        <td>{{product.name}}</td>
+        <td><button @click="decrease(product.name)">-</button> {{product.stock}} <button @click="increase(product.name)">+</button></td>
+        <td><button @click="remove(index)">删除</button></td>
+      </tr>
+      <tr>
+        <td>{{products.length+1}}</td>
+        <td><input type="text" v-model="name" @keydown.enter="add"></td>
+        <td><input type="text" v-model.number="stock" @keydown.enter="add"></td>
+        <td><button @click="add">添加</button></td>
+      </tr>
+    </table>
+  </div>
+</body>
+<script src="../lib/vue.js"></script>
+<script>
+  let vm =new Vue({
+    el:'#app',
+    data() {
+      return {
+        products:[
+          {name:"小米手机",stock:10},
+          {name:"华为手机",stock:10},
+        ],
+        dark:false,
+        name:'',
+        stock:'',
+      }
+    },
+    methods:{
+      decrease(name){
+        for(let i=0;i<this.products.length;i++){
+          let product = this.products[i]
+          if(product.name === name){
+            if(product.stock==0){
+              this.remove(i)
+            }
+            product.stock--
+            break
+          }
+        }
+      },
+      increase(name){
+        for(let i =0;i<this.products.length;i++){
+          let product = this.products[i]
+          if(product.name === name){
+            product.stock++
+          }
+        }
+      },
+      remove(index){
+        this.products.splice(index,1)
+      },
+      add(){
+        if(!this.name) return 
+        if(typeof this.stock !== 'number' || this.stock<0) this.stock =0
+        this.products.push({
+          "name":this.name,
+          "stock":this.stock,
+        })
+        this.name = ''
+        this.stock = ''
+        document.querySelector("input[type='text']").focus()
+      }
+    }
+  })
+</script>
+</html>

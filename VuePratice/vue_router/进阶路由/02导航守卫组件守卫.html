@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02导航守卫组件守卫</title>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/login">login</router-link>
+        <router-link to="/home?hello=world">home</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+<script src="../../lib/vue.js"></script>
+<script src="../../lib/vue-router.js"></script>
+<script>
+    const login = {
+        render(h) {
+            return h('div', 'login')
+        },
+        beforeRouteEnter(to, from, next) {
+            // 在渲染该组件的对应路由被 confirm 前调用
+            // 不！能！获取组件实例 `this`
+            // 因为当守卫执行前，组件实例还没被创建
+            next()
+
+            // 进入组件之前执行
+        },
+        beforeRouteUpdate(to, from, next) {
+            // 在当前路由改变，但是该组件被复用时调用
+            // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+            // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+            // 可以访问组件实例 `this`
+            next()
+
+            // 路由参数更新时执行
+        },
+        beforeRouteLeave(to, from) {
+            // 导航离开该组件的对应路由时调用
+            // 可以访问组件实例 `this`
+            next()
+
+            // 离开路由时执行
+        }
+
+    }
+    const home = {
+        render(h) {
+            return h('div', 'home')
+        },
+        beforeRouteUpdate(to, from, next) {
+            console.log(from.query)
+            console.log(to.query)
+            next({ name: 'login', query: { username: "xqx" } })
+        }
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: "/login",
+                name: 'login',
+                component: login,
+            },
+            {
+                path: "/home",
+                name: 'home',
+                component: home,
+            }
+        ],
+    })
+
+    let vm = new Vue({
+        el: '#app',
+        router: router
+    })
+</script>
+
+</html>

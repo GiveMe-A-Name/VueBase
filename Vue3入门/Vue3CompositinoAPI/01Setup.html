@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01Setup</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        {{name}}
+        <button @click="sayName">sayName</button>
+    </div>
+</body>
+<script>
+
+    const app = Vue.createApp({
+        // setUp函数，返回的对象数据会被暴露到app实例上，
+        // setup暴露的数据是一个分享式数据，并不是响应式数据
+        // 在组件create之前就会被调用
+        // 它会接收两个参数，分别是props,和context上下文
+        setup(props, context) {
+            let name = 'xiaoming'
+            return {
+                name,
+                sayName() {
+                    console.log(`hello Sayname`)
+                }
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

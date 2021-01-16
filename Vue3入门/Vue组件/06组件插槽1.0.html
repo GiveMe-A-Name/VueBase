@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06组件插槽1.0</title>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+</body>
+<script src="../libs/vue.global.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                text: "hello world"
+            }
+        },
+        template: `
+            <my-form>
+            <!-- 
+                slot是会被完全替换掉的，它只是一个插槽位置；
+                而在父组件里定义slot模板，它的作用域是父组件作用域，
+                若是在子组件内定义模板，则作用域是子组件作用域
+             -->
+                <div>{{text}}</div>
+            </my-form>
+            <my-form>
+                <div> slot2</div>
+            </my-form>
+        `
+    })
+    app.component('myForm', {
+        template: `
+        <input type="text">
+        <!-- 
+            由于slot不能定义事件，
+            我们可以在slot外面再包裹一个标签
+            把事件绑定在这个包裹标签中
+          -->
+        <span @click="handleSay">
+            <slot></slot>
+        </span>
+        `,
+        methods: {
+            handleSay() {
+                alert('123')
+            }
+        },
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>
