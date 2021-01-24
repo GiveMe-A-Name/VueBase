@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18Props&attrs</title>
+    <script src="../libs/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+</body>
+<script>
+    const app = Vue.createApp({
+        template: `
+            <div>
+                <child data-hello="world" style="color: red" onclick="console.log('hello')" />
+            </div>
+        `
+    })
+    app.component('child', {
+        template: `<h1 :style="style" ref="hello" >Child
+            {{typeof style}}
+        </h1>`,
+        props: ['style', 'onclick'],
+        setup(props, context) {
+            const { ref } = Vue
+            console.log({
+                ...props
+            });
+            console.log({
+                ...context.attrs
+            });
+            const hello = ref(null)
+            console.log(hello.value);
+            setTimeout(() => {
+                console.log(hello.value?.dataset);
+            }, 1000);
+            return {
+                hello
+            }
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>
